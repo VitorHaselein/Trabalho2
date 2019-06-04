@@ -24821,7 +24821,7 @@ var updateUI = function () {
     produtos.push(new produtos_1.Produto(1, "Shampoo", 25));
     produtos.push(new produtos_1.Produto(2, "Coleira", 15));
     var _render = function () {
-        ReactDOM.render(React.createElement(produtos_1.Produtos, { dados: produtos }), document.getElementById('root'));
+        ReactDOM.render(React.createElement(produtos_1.Produtos, { dados: produtos }), document.getElementById('Produtos'));
     };
     _render();
 };

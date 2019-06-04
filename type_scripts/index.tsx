@@ -10,7 +10,7 @@ var updateUI = () => {
     var _render = () => {
         ReactDOM.render(
             <Produtos dados={produtos} />,
-            document.getElementById('root')
+            document.getElementById('Produtos')
         );
     };
 
