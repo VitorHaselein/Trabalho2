@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+
+<!-- super = mantem o conteudo origianl e acrescenta o titulo -->
+{% block title%} {{super()}}-Index {% endblock %}
+
+
+{% block content %}
+<link href="../static/css/login.css" rel="stylesheet" />
+
+<!-- <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-10" src="../static/images/racao1.jpg" alt="First slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-10" src="../static/images/racao2.jpg" alt="Second slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-10" src="../static/images/racao3.jpg" alt="Third slide">
+    </div>
+  </div>
+</div> -->
+
+<div id="content"></div> 
+<script src="../static/js/index.js"></script>
+
+{% endblock %}

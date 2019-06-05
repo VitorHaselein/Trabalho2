@@ -24816,16 +24816,149 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var produtos_1 = __webpack_require__(/*! ./produtos */ "./type_scripts/produtos.tsx");
+var master_1 = __webpack_require__(/*! ./master */ "./type_scripts/master.tsx");
 var updateUI = function () {
     var produtos = [];
     produtos.push(new produtos_1.Produto(1, "Shampoo", 25));
     produtos.push(new produtos_1.Produto(2, "Coleira", 15));
+    //<Produtos dados={produtos} />,
     var _render = function () {
-        ReactDOM.render(React.createElement(produtos_1.Produtos, { dados: produtos }), document.getElementById('Produtos'));
+        ReactDOM.render(React.createElement(master_1.Master, null), document.getElementById('content'));
     };
     _render();
 };
 updateUI();
+
+
+/***/ }),
+
+/***/ "./type_scripts/login.tsx":
+/*!********************************!*\
+  !*** ./type_scripts/login.tsx ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var Login = /** @class */ (function (_super) {
+    __extends(Login, _super);
+    function Login(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = { login: "", senha: "" };
+        _this.onLoginChange = _this.onLoginChange.bind(_this);
+        _this.onSenhaChange = _this.onSenhaChange.bind(_this);
+        _this.onClick = _this.onClick.bind(_this);
+        return _this;
+    }
+    Login.prototype.onLoginChange = function (ev) {
+        this.setState(Object.assign(this.state, { login: ev.target.value }));
+    };
+    Login.prototype.onSenhaChange = function (ev) {
+        this.setState(Object.assign(this.state, { senha: ev.target.value }));
+    };
+    Login.prototype.onClick = function (e) {
+        //alert(this.state.login + " --- " + this.state.senha);
+        if (this.state.senha == "1234") {
+            this.props.onSuccess(this.state.login);
+        }
+    };
+    Login.prototype.render = function () {
+        return (React.createElement("div", { className: "container" },
+            React.createElement("div", { className: "row" },
+                React.createElement("div", { className: "col-sm-6 col-md-4 col-md-offset-4", style: { paddingTop: "140px" } },
+                    React.createElement("div", { className: "account-wall" },
+                        React.createElement("img", { className: "profile-img", src: "../static/images/login.jpg", alt: "" }),
+                        React.createElement("div", null,
+                            React.createElement("input", { type: "text", name: "login", id: "login", className: "form-control", placeholder: "Email", required: true, value: this.state.login, onChange: this.onLoginChange }),
+                            React.createElement("input", { type: "password", name: "senha", id: "senha", className: "form-control", placeholder: "Senha", required: true, value: this.state.senha, onChange: this.onSenhaChange }),
+                            React.createElement("button", { className: "btn btn-lg btn-primary btn-block", type: "submit", style: { marginBottom: "15px" }, onClick: this.onClick }, "Entrar"),
+                            React.createElement("a", { href: "#", style: { "float": "left" } }, "Criar Conta"),
+                            React.createElement("a", { href: "#", style: { "float": "right" } }, "Esquecia a senha")))))));
+    };
+    return Login;
+}(React.Component));
+exports.Login = Login;
+
+
+/***/ }),
+
+/***/ "./type_scripts/master.tsx":
+/*!*********************************!*\
+  !*** ./type_scripts/master.tsx ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var login_1 = __webpack_require__(/*! ./login */ "./type_scripts/login.tsx");
+var Master = /** @class */ (function (_super) {
+    __extends(Master, _super);
+    function Master(props) {
+        var _this = _super.call(this, props) || this;
+        _this.pagina = { home: 1, carrinho: 2 };
+        _this.onLoginSuccess = _this.onLoginSuccess.bind(_this);
+        _this.render = _this.render.bind(_this);
+        _this.state = { logado: false };
+        return _this;
+    }
+    Master.prototype.onLoginSuccess = function (login) {
+        this.setState(Object.assign(this.state, { logado: true }));
+    };
+    Master.prototype.render = function () {
+        var menu = (React.createElement("div", { className: "header clearfix" },
+            React.createElement("nav", null,
+                React.createElement("ul", { className: "nav nav-pills pull-right" },
+                    React.createElement("li", { role: "presentation", className: "active" },
+                        React.createElement("a", { href: "#" }, "Inicio")),
+                    React.createElement("li", { role: "presentation" },
+                        React.createElement("a", { href: "#" }, "About")),
+                    React.createElement("li", { role: "presentation" },
+                        React.createElement("a", { href: "#" }, "Contact")))),
+            React.createElement("h3", { className: "text-muted" }, "Project name")));
+        if (!this.state.logado) {
+            return React.createElement(login_1.Login, { onSuccess: this.onLoginSuccess });
+        }
+        else {
+            return (React.createElement("div", null,
+                menu,
+                React.createElement("div", null, "Conteudo do sistema")));
+        }
+    };
+    return Master;
+}(React.Component));
+exports.Master = Master;
 
 
 /***/ }),
