@@ -35413,6 +35413,79 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "./type_scripts/home.tsx":
+/*!*******************************!*\
+  !*** ./type_scripts/home.tsx ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var utils = __webpack_require__(/*! ./utils */ "./type_scripts/utils.tsx");
+var Home = /** @class */ (function (_super) {
+    __extends(Home, _super);
+    function Home(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = { produtos: [] };
+        _this.carregaProdutos = _this.carregaProdutos.bind(_this);
+        _this.carregaProdutos();
+        return _this;
+    }
+    Home.prototype.carregaProdutos = function () {
+        var _this = this;
+        utils.postJSON("/produtos", { emEstoque: true }).done((function (produtos) {
+            _this.setState(Object.assign(_this.state, { produtos: produtos }));
+        }).bind(this));
+    };
+    Home.prototype.onProdutoClick = function (e) {
+    };
+    Home.prototype.render = function () {
+        return (React.createElement("div", { className: "container" },
+            React.createElement("div", { className: "row", style: { borderBottom: "1px solid #ccc" } },
+                React.createElement("div", { id: "carousel1", className: "carousel slide", "data-ride": "carousel", style: { width: "100%", backgroundColor: "#FFF" } },
+                    React.createElement("ol", { className: "carousel-indicators", style: { marginBottom: "2px" } },
+                        React.createElement("li", { "data-target": "#carousel1", "data-slide-to": "0", style: { backgroundColor: "purple" }, className: "active" }),
+                        React.createElement("li", { "data-target": "#carousel1", "data-slide-to": "1", style: { backgroundColor: "purple" }, className: "" }),
+                        React.createElement("li", { "data-target": "#carousel1", "data-slide-to": "2", style: { backgroundColor: "purple" }, className: "" })),
+                    React.createElement("div", { className: "carousel-inner" },
+                        React.createElement("div", { className: "carousel-item active first-slide" },
+                            React.createElement("div", { className: "" },
+                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/Kit-Shampoo-Colonia-e-Condicionador-Sanol-Dog-2.png" }))),
+                        React.createElement("div", { className: "carousel-item second-slide" },
+                            React.createElement("div", { className: "" },
+                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/brinquedo-arranhador-para-gatos-creme-cbr03327-11825217.jpg" }))),
+                        React.createElement("div", { className: "carousel-item third-slide" },
+                            React.createElement("div", { className: "" },
+                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/guardar-brinquedos-2.png" })))))),
+            React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } }, this.state.produtos.slice(0, 4).map(function (p) { return (React.createElement("div", { className: "col-sm-3", style: { textAlign: "center" } },
+                React.createElement("div", null,
+                    React.createElement("img", { style: { maxHeight: "160px" }, src: "../static/images/" + p.imagem })),
+                React.createElement("div", { style: { color: "gray" } }, p.nome),
+                React.createElement("div", { style: { color: "gray" } }, "R$ " + p.valor))); }))));
+    };
+    return Home;
+}(React.Component));
+exports.Home = Home;
+
+
+/***/ }),
+
 /***/ "./type_scripts/index.tsx":
 /*!********************************!*\
   !*** ./type_scripts/index.tsx ***!
@@ -35502,7 +35575,6 @@ var Login = /** @class */ (function (_super) {
                         React.createElement("div", null,
                             React.createElement("input", { type: "text", name: "login", id: "login", className: "form-control", placeholder: "Email", required: true, value: this.state.login, onChange: this.onLoginChange }),
                             React.createElement("input", { type: "password", name: "senha", id: "senha", className: "form-control", placeholder: "Senha", required: true, value: this.state.senha, onChange: this.onSenhaChange, onKeyPress: (function (e) {
-                                    debugger;
                                     if (e.keyCode == 13)
                                         _this.onClick(null);
                                 }).bind(this) }),
@@ -35542,6 +35614,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var login_1 = __webpack_require__(/*! ./login */ "./type_scripts/login.tsx");
+var home_1 = __webpack_require__(/*! ./home */ "./type_scripts/home.tsx");
 var PageNames;
 (function (PageNames) {
     PageNames[PageNames["Login"] = 0] = "Login";
@@ -35558,7 +35631,7 @@ var Master = /** @class */ (function (_super) {
         _this.render = _this.render.bind(_this);
         _this.onMenuItemClick = _this.onMenuItemClick.bind(_this);
         _this.onSignOutClick = _this.onSignOutClick.bind(_this);
-        _this.state = { logado: false, pagina: PageNames.Login };
+        _this.state = { logado: false, pagina: PageNames.Home };
         return _this;
     }
     Master.prototype.onMenuItemClick = function (e) {
@@ -35583,14 +35656,12 @@ var Master = /** @class */ (function (_super) {
                 React.createElement("a", { className: "p-2 text-dark", href: "#", "data-pagina_id": PageNames.Carrinho, onClick: this.onMenuItemClick }, "Carrinho"),
                 React.createElement("a", { className: "p-2 text-dark", href: "#", "data-pagina_id": PageNames.Preferences, onClick: this.onMenuItemClick }, "Configura\u00E7\u00F5es")),
             React.createElement("a", { className: "btn btn-outline-primary", href: "#", onClick: this.onSignOutClick }, "Sair")));
-        if (!this.state.logado) {
-            return React.createElement(login_1.Login, { onSuccess: this.onLoginSuccess });
-        }
+        if (false) {}
         else {
             var conteudo = null;
             switch (this.state.pagina) {
                 case PageNames.Home: {
-                    conteudo = (React.createElement("div", null, "Home"));
+                    conteudo = (React.createElement(home_1.Home, null));
                     break;
                 }
                 case PageNames.Produtos: {

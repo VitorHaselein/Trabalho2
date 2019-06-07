@@ -39,7 +39,6 @@ export class Login extends React.Component<{ onSuccess: (string) => void }, { lo
                             <div>
                                 <input type="text" name="login" id="login" className="form-control" placeholder="Email" required value={this.state.login} onChange={this.onLoginChange} />
                                 <input type="password" name="senha" id="senha" className="form-control" placeholder="Senha" required value={this.state.senha} onChange={this.onSenhaChange} onKeyPress={((e) => {
-                                    debugger;
                                     if (e.keyCode == 13)
                                         this.onClick(null);
                                 }).bind(this)} />

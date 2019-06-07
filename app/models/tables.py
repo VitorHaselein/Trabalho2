@@ -22,6 +22,14 @@ class User(db.Model):
     def __repr__(self):
         return "<User %r>" % self.name
 
+class Produto(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.Text)
+    valor = db.Column(db.Float)
+    categoria = db.Column(db.Text)
+    qtd = db.Column(db.Integer)
+    imagem = db.Column(db.String)
+
 # class Post(db.Model):
 #     __tablename__ = "posts"
 

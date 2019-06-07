@@ -2,6 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom';
 import { Login } from './login';
 import * as bs from 'bootstrap';
+import { Home } from './home';
 
 enum PageNames {
     Login = 0,
@@ -20,7 +21,7 @@ export class Master extends React.Component<{}, { logado: boolean, pagina: PageN
         this.onMenuItemClick = this.onMenuItemClick.bind(this);
         this.onSignOutClick = this.onSignOutClick.bind(this);
 
-        this.state = { logado: false, pagina: PageNames.Login };
+        this.state = { logado: false, pagina: PageNames.Home };
     }
 
     onMenuItemClick(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
@@ -51,13 +52,13 @@ export class Master extends React.Component<{}, { logado: boolean, pagina: PageN
             <a className="btn btn-outline-primary" href="#" onClick={this.onSignOutClick}>Sair</a>
         </div>);
 
-        if (!this.state.logado) {
+        if (false && !this.state.logado) {
             return <Login onSuccess={this.onLoginSuccess} />
         } else {
             var conteudo = null;
             switch (this.state.pagina) {
                 case PageNames.Home: {
-                    conteudo = (<div>Home</div>);
+                    conteudo = (<Home />)
                     break;
                 }
                 case PageNames.Produtos: {
