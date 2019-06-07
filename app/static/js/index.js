@@ -35473,11 +35473,13 @@ var Home = /** @class */ (function (_super) {
                         React.createElement("div", { className: "carousel-item third-slide" },
                             React.createElement("div", { className: "" },
                                 React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/guardar-brinquedos-2.png" })))))),
-            React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } }, this.state.produtos.slice(0, 4).map(function (p) { return (React.createElement("div", { className: "col-sm-3", style: { textAlign: "center" } },
-                React.createElement("div", null,
-                    React.createElement("img", { style: { maxHeight: "160px" }, src: "../static/images/" + p.imagem })),
-                React.createElement("div", { style: { color: "gray" } }, p.nome),
-                React.createElement("div", { style: { color: "gray" } }, "R$ " + p.valor))); }))));
+            React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } }, this.state.produtos.length <= 0 ?
+                (React.createElement("div", null, "Carregando...")) :
+                (this.state.produtos.slice(0, 4).map(function (p) { return (React.createElement("div", { className: "col-sm-3", style: { textAlign: "center" } },
+                    React.createElement("div", null,
+                        React.createElement("img", { style: { maxHeight: "160px" }, src: "../static/images/" + p.imagem })),
+                    React.createElement("div", { style: { color: "gray" } }, p.nome),
+                    React.createElement("div", { style: { color: "gray" } }, "R$ " + p.valor))); })))));
     };
     return Home;
 }(React.Component));
