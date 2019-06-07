@@ -17,6 +17,10 @@
   },
   "scripts": {},
   "dependencies": {
-    "input-format": "^0.2.4"
+    "@types/bootstrap": "^4.3.0",
+    "@types/jquery": "^3.3.29",
+    "bootstrap": "^4.3.1",
+    "input-format": "^0.2.4",
+    "jquery": "^3.4.1"
   }
 }
