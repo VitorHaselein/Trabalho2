@@ -38,16 +38,16 @@ export class Master extends React.Component<{}, { logado: boolean, pagina: PageN
     }
 
     render() {
-        var menu = (<div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+        var menu = (<div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow header " >
             <h5 className="my-0 mr-md-auto font-weight-normal">
-                <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Home} onClick={this.onMenuItemClick}><b>Pet</b> Shop</a>
+                <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Home} onClick={this.onMenuItemClick}><b>AMIGO PET</b></a>
             </h5>
 
             <nav className="my-2 my-md-0 mr-md-3">
-                <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Home} onClick={this.onMenuItemClick}>Início</a>
+                {/* <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Home} onClick={this.onMenuItemClick}>Início</a> */}
                 <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Produtos} onClick={this.onMenuItemClick}>Produtos</a>
                 <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Carrinho} onClick={this.onMenuItemClick}>Carrinho</a>
-                <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Preferences} onClick={this.onMenuItemClick}>Configurações</a>
+                {/* <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Preferences} onClick={this.onMenuItemClick}>Configurações</a> */}
             </nav>
             <a className="btn btn-outline-primary" href="#" onClick={this.onSignOutClick}>Sair</a>
         </div>);

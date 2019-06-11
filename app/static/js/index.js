@@ -35462,15 +35462,19 @@ var Home = /** @class */ (function (_super) {
                     React.createElement("ol", { className: "carousel-indicators", style: { marginBottom: "2px" } },
                         React.createElement("li", { "data-target": "#carousel1", "data-slide-to": "0", style: { backgroundColor: "purple" }, className: "active" }),
                         React.createElement("li", { "data-target": "#carousel1", "data-slide-to": "1", style: { backgroundColor: "purple" }, className: "" }),
-                        React.createElement("li", { "data-target": "#carousel1", "data-slide-to": "2", style: { backgroundColor: "purple" }, className: "" })),
+                        React.createElement("li", { "data-target": "#carousel1", "data-slide-to": "2", style: { backgroundColor: "purple" }, className: "" }),
+                        React.createElement("li", { "data-target": "#carousel1", "data-slide-to": "3", style: { backgroundColor: "purple" }, className: "" })),
                     React.createElement("div", { className: "carousel-inner" },
-                        React.createElement("div", { className: "carousel-item active first-slide" },
+                        React.createElement("div", { className: "carousel-item first-slide" },
+                            React.createElement("div", { className: "" },
+                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/bunner.jpg" }))),
+                        React.createElement("div", { className: "carousel-item active second-slide" },
                             React.createElement("div", { className: "" },
                                 React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/Kit-Shampoo-Colonia-e-Condicionador-Sanol-Dog-2.png" }))),
-                        React.createElement("div", { className: "carousel-item second-slide" },
+                        React.createElement("div", { className: "carousel-item third-slide" },
                             React.createElement("div", { className: "" },
                                 React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/brinquedo-arranhador-para-gatos-creme-cbr03327-11825217.jpg" }))),
-                        React.createElement("div", { className: "carousel-item third-slide" },
+                        React.createElement("div", { className: "carousel-item four-slide" },
                             React.createElement("div", { className: "" },
                                 React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/guardar-brinquedos-2.png" })))))),
             React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } }, this.state.produtos.slice(0, 4).map(function (p) { return (React.createElement("div", { className: "col-sm-3", style: { textAlign: "center" } },
@@ -35645,16 +35649,13 @@ var Master = /** @class */ (function (_super) {
         this.setState(Object.assign(this.state, { logado: false }));
     };
     Master.prototype.render = function () {
-        var menu = (React.createElement("div", { className: "d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow" },
+        var menu = (React.createElement("div", { className: "d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow header " },
             React.createElement("h5", { className: "my-0 mr-md-auto font-weight-normal" },
                 React.createElement("a", { className: "p-2 text-dark", href: "#", "data-pagina_id": PageNames.Home, onClick: this.onMenuItemClick },
-                    React.createElement("b", null, "Pet"),
-                    " Shop")),
+                    React.createElement("b", null, "AMIGO PET"))),
             React.createElement("nav", { className: "my-2 my-md-0 mr-md-3" },
-                React.createElement("a", { className: "p-2 text-dark", href: "#", "data-pagina_id": PageNames.Home, onClick: this.onMenuItemClick }, "In\u00EDcio"),
                 React.createElement("a", { className: "p-2 text-dark", href: "#", "data-pagina_id": PageNames.Produtos, onClick: this.onMenuItemClick }, "Produtos"),
-                React.createElement("a", { className: "p-2 text-dark", href: "#", "data-pagina_id": PageNames.Carrinho, onClick: this.onMenuItemClick }, "Carrinho"),
-                React.createElement("a", { className: "p-2 text-dark", href: "#", "data-pagina_id": PageNames.Preferences, onClick: this.onMenuItemClick }, "Configura\u00E7\u00F5es")),
+                React.createElement("a", { className: "p-2 text-dark", href: "#", "data-pagina_id": PageNames.Carrinho, onClick: this.onMenuItemClick }, "Carrinho")),
             React.createElement("a", { className: "btn btn-outline-primary", href: "#", onClick: this.onSignOutClick }, "Sair")));
         if (false) {}
         else {
