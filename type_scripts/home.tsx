@@ -63,15 +63,17 @@ export class Home extends React.Component<{}, { produtos: Produto[] }> {
                     </div>
                 </div>
                 <div className="row" style={{ backgroundColor: "white", padding: "32px" }}>
-                    {this.state.produtos.slice(0, 4).map(p => (
-                        <div className="col-sm-3" style={{ textAlign: "center" }}>
-                            <div>
-                                <img style={{ maxHeight: "160px" }} src={"../static/images/" + p.imagem} />
+                    {this.state.produtos.length <= 0 ?
+                        (<div>Carregando...</div>) :
+                        (this.state.produtos.slice(0, 4).map(p => (
+                            <div className="col-sm-3" style={{ textAlign: "center" }}>
+                                <div>
+                                    <img style={{ maxHeight: "160px" }} src={"../static/images/" + p.imagem} />
+                                </div>
+                                <div style={{ color: "gray" }}>{p.nome}</div>
+                                <div style={{ color: "gray" }}>{"R$ " + p.valor}</div>
                             </div>
-                            <div style={{ color: "gray" }}>{p.nome}</div>
-                            <div style={{ color: "gray" }}>{"R$ " + p.valor}</div>
-                        </div>
-                    ))}
+                        )))}
                 </div>
             </div>
         );
