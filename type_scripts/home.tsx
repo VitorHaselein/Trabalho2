@@ -25,7 +25,7 @@ export class Home extends React.Component<{}, { produtos: Produto[] }> {
 
     render() {
         return (
-            <div className="container">
+            <div>
                 <div className="row" style={{ borderBottom: "1px solid #ccc" }}>
                     <div id="carousel1" className="carousel slide" data-ride="carousel" style={{ width: "100%", backgroundColor: "#FFF" }}>
                         <ol className="carousel-indicators" style={{ marginBottom: "2px" }}>
@@ -35,30 +35,34 @@ export class Home extends React.Component<{}, { produtos: Produto[] }> {
                             <li data-target="#carousel1" data-slide-to="3" style={{ backgroundColor: "purple" }} className=""></li>
                         </ol>
                         <div className="carousel-inner">
-                            <div className="carousel-item first-slide">
+                            <div className="carousel-item active">
                                 <div className="">
                                     <img className="d-block" style={{ margin: "auto", height: "400px" }} src="../static/images/bunner.jpg" />
                                 </div>
                             </div>
 
-                            <div className="carousel-item active second-slide">
+                            <div className="carousel-item">
                                 <div className="">
                                     <img className="d-block" style={{ margin: "auto", height: "400px" }} src="../static/images/Kit-Shampoo-Colonia-e-Condicionador-Sanol-Dog-2.png" />
                                 </div>
-                                {}
+                                {/* <div className="carousel-caption text-left" style={{ color: "black" }}>
+                                    <h1 title="Variadas marcas de shampoo.">Shampoos</h1>
+                                    <p><a className="btn btn-lg btn-primary" href="#" role="button">Sign up today</a></p>
+                                </div> */}
                             </div>
-                            <div className="carousel-item third-slide">
+                            <div className="carousel-item">
                                 <div className="">
                                     <img className="d-block" style={{ margin: "auto", height: "400px" }} src="../static/images/brinquedo-arranhador-para-gatos-creme-cbr03327-11825217.jpg" />
                                 </div>
-                                {}
+                                {/* <div className="carousel-caption text-left" style={{ color: "black" }}>
+                                    <h1 title="Rações, Brinquedos, Vacinas e muito mais.">Produtos para todos os seus PETS!</h1>
+                                </div> */}
                             </div>
-                            <div className="carousel-item four-slide">
+                            <div className="carousel-item">
                                 <div className="">
                                     <img className="d-block" style={{ margin: "auto", height: "400px" }} src="../static/images/guardar-brinquedos-2.png" />
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>

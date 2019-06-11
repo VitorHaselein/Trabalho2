@@ -76,3 +76,11 @@
 .header{
     background:  #80008054!important
 }
+
+.icone-carrinho{
+    background-image: url('../../static/images/cart.webp');
+    background-size: 32px;
+    background-repeat: no-repeat;
+    background-position: center left;
+    padding-left: 36px !important;
+}

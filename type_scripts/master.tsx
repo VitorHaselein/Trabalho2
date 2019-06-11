@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { Login } from './login';
 import * as bs from 'bootstrap';
 import { Home } from './home';
+import { Produtos } from './produtos';
 
 enum PageNames {
     Login = 0,
@@ -38,7 +39,7 @@ export class Master extends React.Component<{}, { logado: boolean, pagina: PageN
     }
 
     render() {
-        var menu = (<div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow header " >
+        var menu = (<div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom box-shadow header " >
             <h5 className="my-0 mr-md-auto font-weight-normal">
                 <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Home} onClick={this.onMenuItemClick}><b>AMIGO PET</b></a>
             </h5>
@@ -46,10 +47,10 @@ export class Master extends React.Component<{}, { logado: boolean, pagina: PageN
             <nav className="my-2 my-md-0 mr-md-3">
                 {/* <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Home} onClick={this.onMenuItemClick}>Início</a> */}
                 <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Produtos} onClick={this.onMenuItemClick}>Produtos</a>
-                <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Carrinho} onClick={this.onMenuItemClick}>Carrinho</a>
+                <a className="p-2 text-dark icone-carrinho" href="#" data-pagina_id={PageNames.Carrinho} onClick={this.onMenuItemClick} title="Carrinho"></a>
                 {/* <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Preferences} onClick={this.onMenuItemClick}>Configurações</a> */}
             </nav>
-            <a className="btn btn-outline-primary" href="#" onClick={this.onSignOutClick}>Sair</a>
+            <a className="btn btn-outline-primary" href="#" onClick={this.onSignOutClick}>{this.state.logado ? "Sair" : "Entrar"} </a>
         </div>);
 
         if (false && !this.state.logado) {
@@ -62,7 +63,7 @@ export class Master extends React.Component<{}, { logado: boolean, pagina: PageN
                     break;
                 }
                 case PageNames.Produtos: {
-                    conteudo = (<div>Produto</div>);
+                    conteudo = (<Produtos />);
                     break;
                 }
                 case PageNames.Carrinho: {
@@ -80,7 +81,9 @@ export class Master extends React.Component<{}, { logado: boolean, pagina: PageN
 
             return (<div>
                 {menu}
-                {conteudo}
+                <div className="container">
+                    {conteudo}
+                </div>
             </div>);
         }
     }
