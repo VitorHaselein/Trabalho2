@@ -4,16 +4,19 @@ import { Login } from './login';
 import * as bs from 'bootstrap';
 import { Home } from './home';
 import { Produtos } from './produtos';
+import { ProdutoDetalhes } from './produto_detalhes';
+// import { BrowserRouter } from 'react-router-dom'
 
 enum PageNames {
     Login = 0,
     Home = 1,
     Carrinho = 2,
     Produtos = 3,
-    Preferences = 4
+    Preferences = 4,
+    ProdutoDetalhes = 5
 }
 
-export class Master extends React.Component<{}, { logado: boolean, pagina: PageNames }> {
+export class Master extends React.Component<{}, { logado: boolean, pagina: PageNames, id: number }> {
     constructor(props) {
         super(props);
 
@@ -21,8 +24,9 @@ export class Master extends React.Component<{}, { logado: boolean, pagina: PageN
         this.render = this.render.bind(this);
         this.onMenuItemClick = this.onMenuItemClick.bind(this);
         this.onSignOutClick = this.onSignOutClick.bind(this);
+        this.onProdutoSelected = this.onProdutoSelected.bind(this);
 
-        this.state = { logado: false, pagina: PageNames.Home };
+        this.state = { logado: false, pagina: PageNames.Home, id: 0 };
     }
 
     onMenuItemClick(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
@@ -36,6 +40,10 @@ export class Master extends React.Component<{}, { logado: boolean, pagina: PageN
 
     onSignOutClick(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
         this.setState(Object.assign(this.state, { logado: false }));
+    }
+
+    onProdutoSelected(id: number) {
+        this.setState(Object.assign(this.state, { pagina: PageNames.ProdutoDetalhes, id: id }));
     }
 
     render() {
@@ -63,7 +71,7 @@ export class Master extends React.Component<{}, { logado: boolean, pagina: PageN
                     break;
                 }
                 case PageNames.Produtos: {
-                    conteudo = (<Produtos />);
+                    conteudo = (<Produtos onProdutoSelected={this.onProdutoSelected} />);
                     break;
                 }
                 case PageNames.Carrinho: {
@@ -74,8 +82,13 @@ export class Master extends React.Component<{}, { logado: boolean, pagina: PageN
                     conteudo = (<div>Preferences</div>);
                     break;
                 }
+                case PageNames.ProdutoDetalhes: {
+                    conteudo = <ProdutoDetalhes id={this.state.id} />
+                    break;
+                }
                 default: {
                     conteudo = (<div>??</div>);
+                    break;
                 }
             }
 

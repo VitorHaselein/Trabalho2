@@ -32,6 +32,13 @@ def produtos():
     return jsonify(produtos)
 
 
+@app.route("/produtos/getById/<id>", methods=['GET', 'POST'])
+def produto_getById(id):
+    produto = list(Produto.query.filter_by(id=id))
+    result = json.loads(json.dumps(produto, cls=AlchemyEncoder))
+    return jsonify(result[0] if len(result) > 0 else None)
+
+
 class AlchemyEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj.__class__, DeclarativeMeta):

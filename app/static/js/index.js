@@ -35617,6 +35617,8 @@ var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var login_1 = __webpack_require__(/*! ./login */ "./type_scripts/login.tsx");
 var home_1 = __webpack_require__(/*! ./home */ "./type_scripts/home.tsx");
 var produtos_1 = __webpack_require__(/*! ./produtos */ "./type_scripts/produtos.tsx");
+var produto_detalhes_1 = __webpack_require__(/*! ./produto_detalhes */ "./type_scripts/produto_detalhes.tsx");
+// import { BrowserRouter } from 'react-router-dom'
 var PageNames;
 (function (PageNames) {
     PageNames[PageNames["Login"] = 0] = "Login";
@@ -35624,6 +35626,7 @@ var PageNames;
     PageNames[PageNames["Carrinho"] = 2] = "Carrinho";
     PageNames[PageNames["Produtos"] = 3] = "Produtos";
     PageNames[PageNames["Preferences"] = 4] = "Preferences";
+    PageNames[PageNames["ProdutoDetalhes"] = 5] = "ProdutoDetalhes";
 })(PageNames || (PageNames = {}));
 var Master = /** @class */ (function (_super) {
     __extends(Master, _super);
@@ -35633,7 +35636,8 @@ var Master = /** @class */ (function (_super) {
         _this.render = _this.render.bind(_this);
         _this.onMenuItemClick = _this.onMenuItemClick.bind(_this);
         _this.onSignOutClick = _this.onSignOutClick.bind(_this);
-        _this.state = { logado: false, pagina: PageNames.Home };
+        _this.onProdutoSelected = _this.onProdutoSelected.bind(_this);
+        _this.state = { logado: false, pagina: PageNames.Home, id: 0 };
         return _this;
     }
     Master.prototype.onMenuItemClick = function (e) {
@@ -35645,6 +35649,9 @@ var Master = /** @class */ (function (_super) {
     };
     Master.prototype.onSignOutClick = function (e) {
         this.setState(Object.assign(this.state, { logado: false }));
+    };
+    Master.prototype.onProdutoSelected = function (id) {
+        this.setState(Object.assign(this.state, { pagina: PageNames.ProdutoDetalhes, id: id }));
     };
     Master.prototype.render = function () {
         var menu = (React.createElement("div", { className: "d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom box-shadow header " },
@@ -35666,7 +35673,7 @@ var Master = /** @class */ (function (_super) {
                     break;
                 }
                 case PageNames.Produtos: {
-                    conteudo = (React.createElement(produtos_1.Produtos, null));
+                    conteudo = (React.createElement(produtos_1.Produtos, { onProdutoSelected: this.onProdutoSelected }));
                     break;
                 }
                 case PageNames.Carrinho: {
@@ -35677,8 +35684,13 @@ var Master = /** @class */ (function (_super) {
                     conteudo = (React.createElement("div", null, "Preferences"));
                     break;
                 }
+                case PageNames.ProdutoDetalhes: {
+                    conteudo = React.createElement(produto_detalhes_1.ProdutoDetalhes, { id: this.state.id });
+                    break;
+                }
                 default: {
                     conteudo = (React.createElement("div", null, "??"));
+                    break;
                 }
             }
             return (React.createElement("div", null,
@@ -35689,6 +35701,88 @@ var Master = /** @class */ (function (_super) {
     return Master;
 }(React.Component));
 exports.Master = Master;
+
+
+/***/ }),
+
+/***/ "./type_scripts/produto_detalhes.tsx":
+/*!*******************************************!*\
+  !*** ./type_scripts/produto_detalhes.tsx ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+// export class Produto {
+//     id: number;
+//     name: string;
+//     preco: Number;
+//     /**
+//      *
+//      */
+//     constructor(id: number, name: string, preco: Number) {
+//         this.id = id;
+//         this.name = name;
+//         this.preco = preco;
+//     }
+// }
+var ProdutoDetalhes = /** @class */ (function (_super) {
+    __extends(ProdutoDetalhes, _super);
+    function ProdutoDetalhes(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = { produto: null };
+        _this.carregaProdutos = _this.carregaProdutos.bind(_this);
+        _this.onProdutoClick = _this.onProdutoClick.bind(_this);
+        _this.carregaProdutos();
+        return _this;
+    }
+    ProdutoDetalhes.prototype.carregaProdutos = function () {
+        var _this = this;
+        jQuery.get("/produtos/getById/" + this.props.id).done((function (produto) {
+            _this.setState(Object.assign(_this.state, { produto: produto }));
+        }).bind(this));
+    };
+    ProdutoDetalhes.prototype.onProdutoClick = function (ev) {
+        // debugger;
+        // var pid = parseInt(ev.currentTarget.getAttribute("data-produtoid"));
+        // var produto = this.state.produtos.filter(p => p.id == pid).pop();
+        // console.log(produto.nome);
+    };
+    ProdutoDetalhes.prototype.render = function () {
+        if (this.state.produto != null) {
+            return (React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } },
+                React.createElement("div", { className: "col-sm-3", style: { textAlign: "center" }, "data-produtoid": this.state.produto.id, onClick: this.onProdutoClick },
+                    React.createElement("div", null,
+                        React.createElement("img", { style: { maxHeight: "160px" }, src: "../static/images/" + this.state.produto.imagem })),
+                    React.createElement("button", { className: "btn btn-primary", title: "" }, "Adicionar no Carrinho")),
+                React.createElement("div", { className: "col-sm-8", style: { textAlign: "left" }, "data-produtoid": this.state.produto.id, onClick: this.onProdutoClick },
+                    React.createElement("h3", { style: { color: "black" } }, this.state.produto.nome),
+                    React.createElement("h5", { style: { color: "#3e0075" } }, "R$ " + this.state.produto.valor),
+                    React.createElement("h5", { style: { color: "gray" } }, "Estoque: " + this.state.produto.qtd))));
+        }
+        else {
+            return (React.createElement("div", null, "Buscando dados do produto..."));
+        }
+    };
+    return ProdutoDetalhes;
+}(React.Component));
+exports.ProdutoDetalhes = ProdutoDetalhes;
 
 
 /***/ }),
@@ -35752,16 +35846,15 @@ var Produtos = /** @class */ (function (_super) {
         var pid = parseInt(ev.currentTarget.getAttribute("data-produtoid"));
         var produto = this.state.produtos.filter(function (p) { return p.id == pid; }).pop();
         console.log(produto.nome);
+        this.props.onProdutoSelected(pid);
     };
     Produtos.prototype.render = function () {
         var _this = this;
-        return (React.createElement("div", null,
-            React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } },
-                React.createElement("div", null, this.state.produtos.map(function (p) { return (React.createElement("div", { className: "col-sm-3", style: { textAlign: "center" }, "data-produtoid": p.id, onClick: _this.onProdutoClick },
-                    React.createElement("div", null,
-                        React.createElement("img", { style: { maxHeight: "160px" }, src: "../static/images/" + p.imagem })),
-                    React.createElement("div", { style: { color: "gray" } }, p.nome),
-                    React.createElement("div", { style: { color: "gray" } }, "R$ " + p.valor))); })))));
+        return (React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } }, this.state.produtos.map(function (p) { return (React.createElement("div", { className: "col-sm-3", style: { textAlign: "center" }, "data-produtoid": p.id, onClick: _this.onProdutoClick },
+            React.createElement("div", null,
+                React.createElement("img", { style: { maxHeight: "160px" }, src: "../static/images/" + p.imagem })),
+            React.createElement("div", { style: { color: "gray" } }, p.nome),
+            React.createElement("div", { style: { color: "gray" } }, "R$ " + p.valor))); })));
     };
     return Produtos;
 }(React.Component));

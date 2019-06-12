@@ -18,7 +18,7 @@ import { Produto } from './models';
 //     }
 // }
 
-export class Produtos extends React.Component<{}, { produtos: Produto[] }> {
+export class Produtos extends React.Component<{ onProdutoSelected(id: number): void }, { produtos: Produto[] }> {
     produtos: Produto[];
 
     constructor(props) {
@@ -43,24 +43,21 @@ export class Produtos extends React.Component<{}, { produtos: Produto[] }> {
         var pid = parseInt(ev.currentTarget.getAttribute("data-produtoid"));
         var produto = this.state.produtos.filter(p => p.id == pid).pop();
         console.log(produto.nome);
+        this.props.onProdutoSelected(pid);
     }
 
     render() {
-        return (<div>
+        return (
             <div className="row" style={{ backgroundColor: "white", padding: "32px" }}>
-                <div>
-                    {this.state.produtos.map(p => (
-                        <div className="col-sm-3" style={{ textAlign: "center" }} data-produtoid={p.id} onClick={this.onProdutoClick} >
-                            <div>
-                                <img style={{ maxHeight: "160px" }} src={"../static/images/" + p.imagem} />
-                            </div>
-                            <div style={{ color: "gray" }}>{p.nome}</div>
-                            <div style={{ color: "gray" }}>{"R$ " + p.valor}</div>
+                {this.state.produtos.map(p => (
+                    <div className="col-sm-3" style={{ textAlign: "center" }} data-produtoid={p.id} onClick={this.onProdutoClick} >
+                        <div>
+                            <img style={{ maxHeight: "160px" }} src={"../static/images/" + p.imagem} />
                         </div>
-                    ))}
-                </div>
-                
-            </div>
-        </div>);
+                        <div style={{ color: "gray" }}>{p.nome}</div>
+                        <div style={{ color: "gray" }}>{"R$ " + p.valor}</div>
+                    </div>
+                ))}
+            </div>);
     }
 }
