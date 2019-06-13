@@ -27,7 +27,6 @@ export class Home extends React.Component<{}, { produtos: Produto[] }> {
     render() {
         return (
             <div>
-                <NavLink to="/produtos" >Produtos</NavLink>
                 <div className="row" style={{ borderBottom: "1px solid #ccc" }}>
                     <div id="carousel1" className="carousel slide" data-ride="carousel" style={{ width: "100%", backgroundColor: "#FFF" }}>
                         <ol className="carousel-indicators" style={{ marginBottom: "2px" }}>
@@ -73,11 +72,13 @@ export class Home extends React.Component<{}, { produtos: Produto[] }> {
                         (<div>Carregando...</div>) :
                         (this.state.produtos.slice(0, 4).map(p => (
                             <div className="col-sm-3" style={{ textAlign: "center" }}>
-                                <div>
-                                    <img style={{ maxHeight: "160px" }} src={"../static/images/" + p.imagem} />
-                                </div>
-                                <div style={{ color: "gray" }}>{p.nome}</div>
-                                <div style={{ color: "gray" }}>{"R$ " + p.valor}</div>
+                                <NavLink to={"/produto_detalhes/" + p.id}>
+                                    <div>
+                                        <img style={{ maxHeight: "160px" }} src={"../static/images/" + p.imagem} />
+                                    </div>
+                                    <div style={{ color: "gray" }}>{p.nome}</div>
+                                    <div style={{ color: "gray" }}>{"R$ " + p.valor}</div>
+                                </NavLink>
                             </div>
                         )))}
                 </div>

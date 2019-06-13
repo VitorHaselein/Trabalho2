@@ -18,7 +18,7 @@ import { Produto } from './models';
 //     }
 // }
 
-export class ProdutoDetalhes extends React.Component<{ id: Number }, { produto: Produto }> {
+export class ProdutoDetalhes extends React.Component<{ id: Number, onProdutoAdd: (p: Produto) => void }, { produto: Produto }> {
     produtos: Produto[];
 
     constructor(props) {
@@ -37,24 +37,22 @@ export class ProdutoDetalhes extends React.Component<{ id: Number }, { produto: 
         }).bind(this));
     }
 
-    onProdutoClick(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        // debugger;
-        // var pid = parseInt(ev.currentTarget.getAttribute("data-produtoid"));
-        // var produto = this.state.produtos.filter(p => p.id == pid).pop();
-        // console.log(produto.nome);
+    onProdutoClick(ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        var pid = parseInt(ev.currentTarget.getAttribute("data-produtoid"));
+        this.props.onProdutoAdd(this.state.produto);
     }
 
     render() {
         if (this.state.produto != null) {
             return (
                 <div className="row" style={{ backgroundColor: "white", padding: "32px" }}>
-                    <div className="col-sm-3" style={{ textAlign: "center" }} data-produtoid={this.state.produto.id} onClick={this.onProdutoClick} >
+                    <div className="col-sm-3" style={{ textAlign: "center" }} >
                         <div>
-                            <img style={{ maxHeight: "160px" }} src={"../static/images/" + this.state.produto.imagem} />
+                            <img style={{ height: "160px", backgroundColor: "#ccc", minWidth: "100px" }} src={"../static/images/" + this.state.produto.imagem} />
                         </div>
-                        <button className="btn btn-primary" title="">Adicionar no Carrinho</button>
+                        <button className="btn btn-primary" data-produtoid={this.state.produto.id} onClick={this.onProdutoClick}>Adicionar no Carrinho</button>
                     </div>
-                    <div className="col-sm-8" style={{ textAlign: "left" }} data-produtoid={this.state.produto.id} onClick={this.onProdutoClick} >
+                    <div className="col-sm-8" style={{ textAlign: "left" }} >
                         <h3 style={{ color: "black" }}>{this.state.produto.nome}</h3>
                         <h5 style={{ color: "#3e0075" }}>{"R$ " + this.state.produto.valor}</h5>
                         <h5 style={{ color: "gray" }}>{"Estoque: " + this.state.produto.qtd}</h5>

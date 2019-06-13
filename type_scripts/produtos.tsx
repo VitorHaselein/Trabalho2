@@ -19,16 +19,17 @@ import { NavLink } from 'react-router-dom';
 //     }
 // }
 
-export class Produtos extends React.Component<{}, { produtos: Produto[] }> {
+export class Produtos extends React.Component<{}, { filtro: string, produtos: Produto[] }> {
     produtos: Produto[];
 
     constructor(props) {
         super(props);
 
-        this.state = { produtos: [] };
+        this.state = { produtos: [], filtro: "" };
 
         this.carregaProdutos = this.carregaProdutos.bind(this);
         this.onProdutoClick = this.onProdutoClick.bind(this);
+        this.filterChange = this.filterChange.bind(this);
 
         this.carregaProdutos();
     }
@@ -47,17 +48,21 @@ export class Produtos extends React.Component<{}, { produtos: Produto[] }> {
         // this.props.onProdutoSelected(pid);
     }
 
+    filterChange(ev: React.ChangeEvent<HTMLInputElement>) {
+        this.setState(Object.assign(this.state, { filtro: ev.target.value }));
+    }
+
     render() {
         return (
             <div>
                 <div className="row" style={{ backgroundColor: "white", padding: "32px", textAlign: "center" }}>
                     <div className="col-sm-12">
-                        <input type="text" value="" style={{ width: "300px", borderRadius: "4px", "border": "1px solid gray", padding: "5px" }} placeholder="Buscar..." />
+                        <input type="text" value={this.state.filtro} style={{ width: "300px", borderRadius: "4px", "border": "1px solid gray", padding: "5px" }} placeholder="Buscar..." onChange={this.filterChange} />
                     </div>
                 </div>
                 <div className="row" style={{ backgroundColor: "white", padding: "32px" }}>
-                    {this.state.produtos.map(p => (
-                        <div className="col-sm-3" style={{ textAlign: "center" }} data-produtoid={p.id} onClick={this.onProdutoClick} >
+                    {this.state.produtos.filter(p => p.nome.toLowerCase().indexOf(this.state.filtro.toLowerCase()) > -1).map(p => (
+                        <div className="col-sm-3" style={{ textAlign: "center" }} data-produtoid={p.id} onClick={this.onProdutoClick} key={p.id} >
                             <NavLink to={"/produto_detalhes/" + p.id}>
                                 <div>
                                     <img style={{ maxHeight: "160px" }} src={"../static/images/" + p.imagem} />
