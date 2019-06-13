@@ -23,7 +23,6 @@ export class ProdutoDetalhes extends React.Component<{ id: Number }, { produto: 
 
     constructor(props) {
         super(props);
-
         this.state = { produto: null };
 
         this.carregaProdutos = this.carregaProdutos.bind(this);

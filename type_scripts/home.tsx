@@ -2,6 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom';
 import * as utils from './utils';
 import { Produto } from './models';
+import { NavLink, Router } from 'react-router-dom';
 
 export class Home extends React.Component<{}, { produtos: Produto[] }> {
     constructor(props) {
@@ -26,6 +27,7 @@ export class Home extends React.Component<{}, { produtos: Produto[] }> {
     render() {
         return (
             <div>
+                <NavLink to="/produtos" >Produtos</NavLink>
                 <div className="row" style={{ borderBottom: "1px solid #ccc" }}>
                     <div id="carousel1" className="carousel slide" data-ride="carousel" style={{ width: "100%", backgroundColor: "#FFF" }}>
                         <ol className="carousel-indicators" style={{ marginBottom: "2px" }}>

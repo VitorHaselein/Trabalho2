@@ -5,6 +5,7 @@ import * as bs from 'bootstrap';
 import { Home } from './home';
 import { Produtos } from './produtos';
 import { ProdutoDetalhes } from './produto_detalhes';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 // import { BrowserRouter } from 'react-router-dom'
 
 enum PageNames {
@@ -71,7 +72,7 @@ export class Master extends React.Component<{}, { logado: boolean, pagina: PageN
                     break;
                 }
                 case PageNames.Produtos: {
-                    conteudo = (<Produtos onProdutoSelected={this.onProdutoSelected} />);
+                    // conteudo = (<Produtos onProdutoSelected={this.onProdutoSelected} />);
                     break;
                 }
                 case PageNames.Carrinho: {
@@ -95,7 +96,16 @@ export class Master extends React.Component<{}, { logado: boolean, pagina: PageN
             return (<div>
                 {menu}
                 <div className="container">
-                    {conteudo}
+                    <Router>
+                        <Switch>
+                            <Route path="/" exact component={Home} />
+                            <Route path="/produtos" component={Produtos} />
+                            <Route path="/produto_detalhes/:id" component={(info) => (<div><ProdutoDetalhes id={info.match.params.id} /></div>) } />
+                            {/* <Route path="/carrinho" component={Carrinho} /> */}
+                            <Route path="/login" component={Login} />
+                            <Route path="*" component={(<div>404</div>)} />
+                        </Switch>
+                    </Router>
                 </div>
             </div>);
         }

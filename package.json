@@ -21,6 +21,7 @@
     "@types/jquery": "^3.3.29",
     "bootstrap": "^4.3.1",
     "input-format": "^0.2.4",
-    "jquery": "^3.4.1"
+    "jquery": "^3.4.1",
+    "react-router-dom": "^5.0.1"
   }
 }
