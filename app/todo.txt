@@ -1,0 +1,4 @@
+- Login
+- Sign Up (Usuário, Senha, E-mail, Endereço, CEP) gravar o boneco no banco
+- Gravar a compra no banco
+- Adicionar/Remover na tela de detalhes de produto
