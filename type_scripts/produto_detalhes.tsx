@@ -18,44 +18,46 @@ import { Produto } from './models';
 //     }
 // }
 
-export class ProdutoDetalhes extends React.Component<{ id: Number, onProdutoAdd: (p: Produto) => void }, { produto: Produto }> {
+export class ProdutoDetalhes extends React.PureComponent<{ produto: Produto, onProdutoAdd: (p: Produto) => void }, {}> {
     produtos: Produto[];
 
     constructor(props) {
         super(props);
-        this.state = { produto: null };
 
-        this.carregaProdutos = this.carregaProdutos.bind(this);
         this.onProdutoClick = this.onProdutoClick.bind(this);
-
-        this.carregaProdutos();
-    }
-
-    carregaProdutos() {
-        jQuery.get("/produtos/getById/" + this.props.id).done(((produto: Produto) => {
-            this.setState(Object.assign(this.state, { produto: produto }));
-        }).bind(this));
     }
 
     onProdutoClick(ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         var pid = parseInt(ev.currentTarget.getAttribute("data-produtoid"));
-        this.props.onProdutoAdd(this.state.produto);
+        this.props.onProdutoAdd(this.props.produto);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        debugger;
+    }
+
+    componentDidMount() {
+        // debugger;
+    }
+
+    componentWillUpdate(a, b, c) {
+        debugger;
     }
 
     render() {
-        if (this.state.produto != null) {
+        if (this.props.produto != null) {
             return (
                 <div className="row" style={{ backgroundColor: "white", padding: "32px" }}>
                     <div className="col-sm-3" style={{ textAlign: "center" }} >
                         <div>
-                            <img style={{ height: "160px", backgroundColor: "#ccc", minWidth: "100px" }} src={"../static/images/" + this.state.produto.imagem} />
+                            <img key={this.props.produto.id} style={{ height: "160px", backgroundColor: "#ccc", minWidth: "100px" }} src={"../static/images/" + this.props.produto.imagem} />
                         </div>
-                        <button className="btn btn-primary" data-produtoid={this.state.produto.id} onClick={this.onProdutoClick}>Adicionar no Carrinho</button>
+                        <button className="btn btn-primary" data-produtoid={this.props.produto.id} onClick={this.onProdutoClick}>Adicionar no Carrinho</button>
                     </div>
                     <div className="col-sm-8" style={{ textAlign: "left" }} >
-                        <h3 style={{ color: "black" }}>{this.state.produto.nome}</h3>
-                        <h5 style={{ color: "#3e0075" }}>{"R$ " + this.state.produto.valor}</h5>
-                        <h5 style={{ color: "gray" }}>{"Estoque: " + this.state.produto.qtd}</h5>
+                        <h3 style={{ color: "black" }}>{this.props.produto.nome}</h3>
+                        <h5 style={{ color: "#3e0075" }}>{"R$ " + this.props.produto.valor}</h5>
+                        <h5 style={{ color: "gray" }}>{"Estoque: " + this.props.produto.qtd}</h5>
                     </div>
                 </div>);
         } else {

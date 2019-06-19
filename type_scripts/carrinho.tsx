@@ -40,6 +40,10 @@ export class Carrinho extends React.Component<{ produtos: ItemCarrinho[], onProd
         this.props.onProdutoRemove(ic);
     }
 
+    componentDidUpdate(a, b) {
+        debugger;
+    }
+
     render() {
         return (
             <div>
@@ -47,7 +51,7 @@ export class Carrinho extends React.Component<{ produtos: ItemCarrinho[], onProd
                     (<div className="row" style={{ backgroundColor: "white", padding: "32px" }}><h3>{"Carrinho vazio :-("}</h3></div>) :
                     (<div className="row" style={{ backgroundColor: "white", padding: "32px" }}>
                         {this.props.produtos.map(p => (
-                            <div className="col-sm-12" style={{ textAlign: "left", padding: "5px", borderBottom: "1px solid #ccc" }} data-produtoid={p.produto.id} >
+                            <div key={p.produto.id} className="col-sm-12" style={{ textAlign: "left", padding: "5px", borderBottom: "1px solid #ccc" }} data-produtoid={p.produto.id} >
                                 <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "top", width: "150px" }}>
                                     <NavLink to={"/produto_detalhes/" + p.produto.id}>
                                         <img style={{ maxHeight: "100px" }} src={"../static/images/" + p.produto.imagem} />

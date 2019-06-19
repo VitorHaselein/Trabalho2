@@ -9,6 +9,8 @@ import { BrowserRouter as Router, Switch, Route, NavLink } from 'react-router-do
 import { Produto } from './models';
 import { ItemCarrinho, Carrinho } from './carrinho';
 import { CompraFinalizada } from './compra_finalizada';
+import { DataSource } from './dataSource';
+import { useEffect, useRef } from 'react';
 // import { BrowserRouter } from 'react-router-dom'
 
 enum PageNames {
@@ -21,6 +23,8 @@ enum PageNames {
 }
 
 export class Master extends React.Component<{}, { logado: boolean, carrinho: ItemCarrinho[] }> {
+    ds: DataSource = new DataSource();
+
     constructor(props) {
         super(props);
 
@@ -30,9 +34,13 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
         this.onSignOutClick = this.onSignOutClick.bind(this);
         this.onProdutoSelected = this.onProdutoSelected.bind(this);
         this.onProdutoAdd = this.onProdutoAdd.bind(this);
-        this.onItemCarrihoRemove = this.onItemCarrihoRemove.bind(this);
+        this.onItemCarrinhoRemove = this.onItemCarrinhoRemove.bind(this);
+        this.renderProdutoDetalhes = this.renderProdutoDetalhes.bind(this);
+        this.renderCarrinho = this.renderCarrinho.bind(this);
 
         this.state = { logado: false, carrinho: [] };
+
+        this.ds.getProdutos();
     }
 
     onMenuItemClick(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
@@ -53,25 +61,58 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
     }
 
     onProdutoAdd(produto: Produto) {
-        var itemCarrinho = this.state.carrinho.filter(ic => ic.produto.id == produto.id).pop();
+        var carrinho = this.state.carrinho.slice(0);
+        var itemCarrinho = carrinho.filter(ic => ic.produto.id == produto.id).pop();
 
         if (itemCarrinho != null) {
-            itemCarrinho.qtd++;
+            var idx = carrinho.indexOf(itemCarrinho);
+            carrinho[idx] = Object.assign(itemCarrinho, { qtd: itemCarrinho.qtd + 1 });
         } else {
             itemCarrinho = new ItemCarrinho();
             itemCarrinho.produto = produto;
             itemCarrinho.qtd = 1;
-
-            this.state.carrinho.push(itemCarrinho);
+            carrinho.push(itemCarrinho);
         }
 
-        this.setState(Object.assign(this.state, {}));
+        this.setState(Object.assign(this.state, { carrinho: carrinho }));
     }
 
-    onItemCarrihoRemove(itemCarrinho: ItemCarrinho) {
+    useTraceUpdate(props) {
+        const prev = useRef(props);
+        useEffect(() => {
+            const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
+                if (prev.current[k] !== v) {
+                    ps[k] = [prev.current[k], v];
+                }
+                return ps;
+            }, {});
+            if (Object.keys(changedProps).length > 0) {
+                console.log('Changed props:', changedProps);
+            }
+            prev.current = props;
+        });
+    }
+
+    onItemCarrinhoRemove(itemCarrinho: ItemCarrinho) {
         var index = this.state.carrinho.findIndex(ic => ic.produto.id == itemCarrinho.produto.id);
-        this.state.carrinho.splice(index, 1);
-        this.setState(this.state);
+        var carrinho = [...this.state.carrinho];
+        carrinho.splice(index, 1);
+        this.setState(Object.assign(this.state, { carrinho: carrinho }));
+    }
+
+    getProduto(id: Number): Produto {
+        return this.ds.getProdutoById(id);
+    }
+
+    renderProdutoDetalhes(info) {
+        // component={(info) => ()
+        return (<div key={info.match.params.id}>
+            <ProdutoDetalhes produto={this.getProduto(info.match.params.id)} onProdutoAdd={this.onProdutoAdd} />
+        </div>);
+    }
+
+    renderCarrinho(info) {
+        return (<Carrinho produtos={this.state.carrinho} onProdutoRemove={this.onItemCarrinhoRemove} />);
     }
 
     render() {
@@ -91,6 +132,7 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
             <a className="btn btn-outline-primary" href="#" onClick={this.onSignOutClick}>{this.state.logado ? "Sair" : "Entrar"} </a>
         </div>);
 
+
         if (false && !this.state.logado) {
             return <Login onSuccess={this.onLoginSuccess} />
         } else {
@@ -101,8 +143,8 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
                         <Switch>
                             <Route path="/" exact component={Home} />
                             <Route path="/produtos" component={Produtos} />
-                            <Route path="/produto_detalhes/:id" component={(info) => (<div><ProdutoDetalhes id={info.match.params.id} onProdutoAdd={this.onProdutoAdd} /></div>)} />
-                            <Route path="/carrinho" component={(info) => (<Carrinho produtos={this.state.carrinho} onProdutoRemove={this.onItemCarrihoRemove} />)} />
+                            <Route path="/produto_detalhes/:id" component={this.renderProdutoDetalhes} />
+                            <Route path="/carrinho" component={this.renderCarrinho} />
                             <Route path="/login" component={Login} />
                             <Route path="/compra_finalizada" component={CompraFinalizada} />
                             <Route path="*" component={(<div>404</div>)} />

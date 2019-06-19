@@ -34514,7 +34514,7 @@ if (false) {} else {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39424,13 +39424,16 @@ var Carrinho = /** @class */ (function (_super) {
     Carrinho.prototype.onProdutoRemove = function (ic) {
         this.props.onProdutoRemove(ic);
     };
+    Carrinho.prototype.componentDidUpdate = function (a, b) {
+        debugger;
+    };
     Carrinho.prototype.render = function () {
         var _this = this;
         return (React.createElement("div", null, (this.props.produtos.length <= 0 ?
             (React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } },
                 React.createElement("h3", null, "Carrinho vazio :-("))) :
             (React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } },
-                this.props.produtos.map(function (p) { return (React.createElement("div", { className: "col-sm-12", style: { textAlign: "left", padding: "5px", borderBottom: "1px solid #ccc" }, "data-produtoid": p.produto.id },
+                this.props.produtos.map(function (p) { return (React.createElement("div", { key: p.produto.id, className: "col-sm-12", style: { textAlign: "left", padding: "5px", borderBottom: "1px solid #ccc" }, "data-produtoid": p.produto.id },
                     React.createElement("div", { style: { display: "inline-block", textAlign: "center", verticalAlign: "top", width: "150px" } },
                         React.createElement(react_router_dom_1.NavLink, { to: "/produto_detalhes/" + p.produto.id },
                             React.createElement("img", { style: { maxHeight: "100px" }, src: "../static/images/" + p.produto.imagem })),
@@ -39494,6 +39497,46 @@ exports.CompraFinalizada = CompraFinalizada;
 
 /***/ }),
 
+/***/ "./type_scripts/dataSource.tsx":
+/*!*************************************!*\
+  !*** ./type_scripts/dataSource.tsx ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var utils = __webpack_require__(/*! ./utils */ "./type_scripts/utils.tsx");
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+var DataSource = /** @class */ (function () {
+    function DataSource() {
+        this.__cache = {};
+        this.getProdutos = this.getProdutos.bind(this);
+        this.getProdutoById = this.getProdutoById.bind(this);
+    }
+    DataSource.prototype.getProdutos = function () {
+        var _this = this;
+        var xhr = utils.postJSON("/produtos", { emEstoque: true }).then((function (produtos) {
+            _this.__cache["produtos"] = produtos;
+        }).bind(this));
+        if (this.__cache["produtos"]) {
+            return $.when(this.__cache["produtos"]);
+        }
+        else {
+            return xhr;
+        }
+    };
+    DataSource.prototype.getProdutoById = function (_id) {
+        return this.__cache["produtos"].filter(function (p) { return p.id == _id; }).pop();
+    };
+    return DataSource;
+}());
+exports.DataSource = DataSource;
+
+
+/***/ }),
+
 /***/ "./type_scripts/home.tsx":
 /*!*******************************!*\
   !*** ./type_scripts/home.tsx ***!
@@ -39552,16 +39595,22 @@ var Home = /** @class */ (function (_super) {
                                 React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/bunner.jpg" }))),
                         React.createElement("div", { className: "carousel-item" },
                             React.createElement("div", { className: "" },
-                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/Kit-Shampoo-Colonia-e-Condicionador-Sanol-Dog-2.png" }))),
+                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/Kit-Shampoo-Colonia-e-Condicionador-Sanol-Dog-2.png" })),
+                            React.createElement("div", { className: "carousel-caption text-left", style: { color: "black" } },
+                                React.createElement("h1", { title: "Variadas marcas de shampoo." }, "Shampoos"),
+                                React.createElement("p", null,
+                                    React.createElement("a", { className: "btn btn-lg btn-primary", href: "#", role: "button" }, "Sign up today")))),
                         React.createElement("div", { className: "carousel-item" },
                             React.createElement("div", { className: "" },
-                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/brinquedo-arranhador-para-gatos-creme-cbr03327-11825217.jpg" }))),
+                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/brinquedo-arranhador-para-gatos-creme-cbr03327-11825217.jpg" })),
+                            React.createElement("div", { className: "carousel-caption text-left", style: { color: "black" } },
+                                React.createElement("h1", { title: "Ra\u00E7\u00F5es, Brinquedos, Vacinas e muito mais." }, "Produtos para todos os seus PETS!"))),
                         React.createElement("div", { className: "carousel-item" },
                             React.createElement("div", { className: "" },
                                 React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/guardar-brinquedos-2.png" })))))),
             React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } }, this.state.produtos.length <= 0 ?
                 (React.createElement("div", null, "Carregando...")) :
-                (this.state.produtos.slice(0, 4).map(function (p) { return (React.createElement("div", { className: "col-sm-3", style: { textAlign: "center" } },
+                (this.state.produtos.slice(0, 4).map(function (p) { return (React.createElement("div", { key: p.id, className: "col-sm-3", style: { textAlign: "center" } },
                     React.createElement(react_router_dom_1.NavLink, { to: "/produto_detalhes/" + p.id },
                         React.createElement("div", null,
                             React.createElement("img", { style: { maxHeight: "160px" }, src: "../static/images/" + p.imagem })),
@@ -39704,6 +39753,8 @@ var produto_detalhes_1 = __webpack_require__(/*! ./produto_detalhes */ "./type_s
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 var carrinho_1 = __webpack_require__(/*! ./carrinho */ "./type_scripts/carrinho.tsx");
 var compra_finalizada_1 = __webpack_require__(/*! ./compra_finalizada */ "./type_scripts/compra_finalizada.tsx");
+var dataSource_1 = __webpack_require__(/*! ./dataSource */ "./type_scripts/dataSource.tsx");
+var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 // import { BrowserRouter } from 'react-router-dom'
 var PageNames;
 (function (PageNames) {
@@ -39718,14 +39769,18 @@ var Master = /** @class */ (function (_super) {
     __extends(Master, _super);
     function Master(props) {
         var _this = _super.call(this, props) || this;
+        _this.ds = new dataSource_1.DataSource();
         _this.onLoginSuccess = _this.onLoginSuccess.bind(_this);
         _this.render = _this.render.bind(_this);
         _this.onMenuItemClick = _this.onMenuItemClick.bind(_this);
         _this.onSignOutClick = _this.onSignOutClick.bind(_this);
         _this.onProdutoSelected = _this.onProdutoSelected.bind(_this);
         _this.onProdutoAdd = _this.onProdutoAdd.bind(_this);
-        _this.onItemCarrihoRemove = _this.onItemCarrihoRemove.bind(_this);
+        _this.onItemCarrinhoRemove = _this.onItemCarrinhoRemove.bind(_this);
+        _this.renderProdutoDetalhes = _this.renderProdutoDetalhes.bind(_this);
+        _this.renderCarrinho = _this.renderCarrinho.bind(_this);
         _this.state = { logado: false, carrinho: [] };
+        _this.ds.getProdutos();
         return _this;
     }
     Master.prototype.onMenuItemClick = function (e) {
@@ -39742,25 +39797,54 @@ var Master = /** @class */ (function (_super) {
         this.setState(Object.assign(this.state, { pagina: PageNames.ProdutoDetalhes, id: id }));
     };
     Master.prototype.onProdutoAdd = function (produto) {
-        var itemCarrinho = this.state.carrinho.filter(function (ic) { return ic.produto.id == produto.id; }).pop();
+        var carrinho = this.state.carrinho.slice(0);
+        var itemCarrinho = carrinho.filter(function (ic) { return ic.produto.id == produto.id; }).pop();
         if (itemCarrinho != null) {
-            itemCarrinho.qtd++;
+            var idx = carrinho.indexOf(itemCarrinho);
+            carrinho[idx] = Object.assign(itemCarrinho, { qtd: itemCarrinho.qtd + 1 });
         }
         else {
             itemCarrinho = new carrinho_1.ItemCarrinho();
             itemCarrinho.produto = produto;
             itemCarrinho.qtd = 1;
-            this.state.carrinho.push(itemCarrinho);
+            carrinho.push(itemCarrinho);
         }
-        this.setState(Object.assign(this.state, {}));
+        this.setState(Object.assign(this.state, { carrinho: carrinho }));
     };
-    Master.prototype.onItemCarrihoRemove = function (itemCarrinho) {
+    Master.prototype.useTraceUpdate = function (props) {
+        var prev = react_1.useRef(props);
+        react_1.useEffect(function () {
+            var changedProps = Object.entries(props).reduce(function (ps, _a) {
+                var k = _a[0], v = _a[1];
+                if (prev.current[k] !== v) {
+                    ps[k] = [prev.current[k], v];
+                }
+                return ps;
+            }, {});
+            if (Object.keys(changedProps).length > 0) {
+                console.log('Changed props:', changedProps);
+            }
+            prev.current = props;
+        });
+    };
+    Master.prototype.onItemCarrinhoRemove = function (itemCarrinho) {
         var index = this.state.carrinho.findIndex(function (ic) { return ic.produto.id == itemCarrinho.produto.id; });
-        this.state.carrinho.splice(index, 1);
-        this.setState(this.state);
+        var carrinho = this.state.carrinho.slice();
+        carrinho.splice(index, 1);
+        this.setState(Object.assign(this.state, { carrinho: carrinho }));
+    };
+    Master.prototype.getProduto = function (id) {
+        return this.ds.getProdutoById(id);
+    };
+    Master.prototype.renderProdutoDetalhes = function (info) {
+        // component={(info) => ()
+        return (React.createElement("div", { key: info.match.params.id },
+            React.createElement(produto_detalhes_1.ProdutoDetalhes, { produto: this.getProduto(info.match.params.id), onProdutoAdd: this.onProdutoAdd })));
+    };
+    Master.prototype.renderCarrinho = function (info) {
+        return (React.createElement(carrinho_1.Carrinho, { produtos: this.state.carrinho, onProdutoRemove: this.onItemCarrinhoRemove }));
     };
     Master.prototype.render = function () {
-        var _this = this;
         var menu = (React.createElement("div", { className: "d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom box-shadow header " },
             React.createElement("h5", { className: "my-0 mr-md-auto font-weight-normal" },
                 React.createElement(react_router_dom_1.NavLink, { to: "/", className: "p-2 text-dark" },
@@ -39780,9 +39864,8 @@ var Master = /** @class */ (function (_super) {
                         React.createElement(react_router_dom_1.Switch, null,
                             React.createElement(react_router_dom_1.Route, { path: "/", exact: true, component: home_1.Home }),
                             React.createElement(react_router_dom_1.Route, { path: "/produtos", component: produtos_1.Produtos }),
-                            React.createElement(react_router_dom_1.Route, { path: "/produto_detalhes/:id", component: function (info) { return (React.createElement("div", null,
-                                    React.createElement(produto_detalhes_1.ProdutoDetalhes, { id: info.match.params.id, onProdutoAdd: _this.onProdutoAdd }))); } }),
-                            React.createElement(react_router_dom_1.Route, { path: "/carrinho", component: function (info) { return (React.createElement(carrinho_1.Carrinho, { produtos: _this.state.carrinho, onProdutoRemove: _this.onItemCarrihoRemove })); } }),
+                            React.createElement(react_router_dom_1.Route, { path: "/produto_detalhes/:id", component: this.renderProdutoDetalhes }),
+                            React.createElement(react_router_dom_1.Route, { path: "/carrinho", component: this.renderCarrinho }),
                             React.createElement(react_router_dom_1.Route, { path: "/login", component: login_1.Login }),
                             React.createElement(react_router_dom_1.Route, { path: "/compra_finalizada", component: compra_finalizada_1.CompraFinalizada }),
                             React.createElement(react_router_dom_1.Route, { path: "*", component: (React.createElement("div", null, "404")) }))))));
@@ -39836,40 +39919,40 @@ var ProdutoDetalhes = /** @class */ (function (_super) {
     __extends(ProdutoDetalhes, _super);
     function ProdutoDetalhes(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = { produto: null };
-        _this.carregaProdutos = _this.carregaProdutos.bind(_this);
         _this.onProdutoClick = _this.onProdutoClick.bind(_this);
-        _this.carregaProdutos();
         return _this;
     }
-    ProdutoDetalhes.prototype.carregaProdutos = function () {
-        var _this = this;
-        jQuery.get("/produtos/getById/" + this.props.id).done((function (produto) {
-            _this.setState(Object.assign(_this.state, { produto: produto }));
-        }).bind(this));
-    };
     ProdutoDetalhes.prototype.onProdutoClick = function (ev) {
         var pid = parseInt(ev.currentTarget.getAttribute("data-produtoid"));
-        this.props.onProdutoAdd(this.state.produto);
+        this.props.onProdutoAdd(this.props.produto);
+    };
+    ProdutoDetalhes.prototype.componentDidUpdate = function (prevProps, prevState) {
+        debugger;
+    };
+    ProdutoDetalhes.prototype.componentDidMount = function () {
+        // debugger;
+    };
+    ProdutoDetalhes.prototype.componentWillUpdate = function (a, b, c) {
+        debugger;
     };
     ProdutoDetalhes.prototype.render = function () {
-        if (this.state.produto != null) {
+        if (this.props.produto != null) {
             return (React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } },
                 React.createElement("div", { className: "col-sm-3", style: { textAlign: "center" } },
                     React.createElement("div", null,
-                        React.createElement("img", { style: { height: "160px", backgroundColor: "#ccc", minWidth: "100px" }, src: "../static/images/" + this.state.produto.imagem })),
-                    React.createElement("button", { className: "btn btn-primary", "data-produtoid": this.state.produto.id, onClick: this.onProdutoClick }, "Adicionar no Carrinho")),
+                        React.createElement("img", { key: this.props.produto.id, style: { height: "160px", backgroundColor: "#ccc", minWidth: "100px" }, src: "../static/images/" + this.props.produto.imagem })),
+                    React.createElement("button", { className: "btn btn-primary", "data-produtoid": this.props.produto.id, onClick: this.onProdutoClick }, "Adicionar no Carrinho")),
                 React.createElement("div", { className: "col-sm-8", style: { textAlign: "left" } },
-                    React.createElement("h3", { style: { color: "black" } }, this.state.produto.nome),
-                    React.createElement("h5", { style: { color: "#3e0075" } }, "R$ " + this.state.produto.valor),
-                    React.createElement("h5", { style: { color: "gray" } }, "Estoque: " + this.state.produto.qtd))));
+                    React.createElement("h3", { style: { color: "black" } }, this.props.produto.nome),
+                    React.createElement("h5", { style: { color: "#3e0075" } }, "R$ " + this.props.produto.valor),
+                    React.createElement("h5", { style: { color: "gray" } }, "Estoque: " + this.props.produto.qtd))));
         }
         else {
             return (React.createElement("div", null, "Buscando dados do produto..."));
         }
     };
     return ProdutoDetalhes;
-}(React.Component));
+}(React.PureComponent));
 exports.ProdutoDetalhes = ProdutoDetalhes;
 
 

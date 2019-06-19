@@ -46,18 +46,18 @@ export class Home extends React.Component<{}, { produtos: Produto[] }> {
                                 <div className="">
                                     <img className="d-block" style={{ margin: "auto", height: "400px" }} src="../static/images/Kit-Shampoo-Colonia-e-Condicionador-Sanol-Dog-2.png" />
                                 </div>
-                                {/* <div className="carousel-caption text-left" style={{ color: "black" }}>
+                                <div className="carousel-caption text-left" style={{ color: "black" }}>
                                     <h1 title="Variadas marcas de shampoo.">Shampoos</h1>
                                     <p><a className="btn btn-lg btn-primary" href="#" role="button">Sign up today</a></p>
-                                </div> */}
+                                </div>
                             </div>
                             <div className="carousel-item">
                                 <div className="">
                                     <img className="d-block" style={{ margin: "auto", height: "400px" }} src="../static/images/brinquedo-arranhador-para-gatos-creme-cbr03327-11825217.jpg" />
                                 </div>
-                                {/* <div className="carousel-caption text-left" style={{ color: "black" }}>
+                                <div className="carousel-caption text-left" style={{ color: "black" }}>
                                     <h1 title="Rações, Brinquedos, Vacinas e muito mais.">Produtos para todos os seus PETS!</h1>
-                                </div> */}
+                                </div>
                             </div>
                             <div className="carousel-item">
                                 <div className="">
@@ -71,7 +71,7 @@ export class Home extends React.Component<{}, { produtos: Produto[] }> {
                     {this.state.produtos.length <= 0 ?
                         (<div>Carregando...</div>) :
                         (this.state.produtos.slice(0, 4).map(p => (
-                            <div className="col-sm-3" style={{ textAlign: "center" }}>
+                            <div key={p.id} className="col-sm-3" style={{ textAlign: "center" }}>
                                 <NavLink to={"/produto_detalhes/" + p.id}>
                                     <div>
                                         <img style={{ maxHeight: "160px" }} src={"../static/images/" + p.imagem} />
