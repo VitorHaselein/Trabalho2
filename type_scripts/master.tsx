@@ -4,13 +4,14 @@ import { Login } from './login';
 import * as bs from 'bootstrap';
 import { Home } from './home';
 import { Produtos } from './produtos';
-import { ProdutoDetalhes } from './produto_detalhes';
+import { ProdutoDetalhes, OperationType } from './produto_detalhes';
 import { BrowserRouter as Router, Switch, Route, NavLink } from 'react-router-dom'
 import { Produto } from './models';
 import { ItemCarrinho, Carrinho } from './carrinho';
-import { CompraFinalizada } from './compra_finalizada';
+import { FinalizarCompra } from './finalizar_compra';
 import { DataSource } from './dataSource';
 import { useEffect, useRef } from 'react';
+import { CompraFinalizada } from './compra_finalizada';
 // import { BrowserRouter } from 'react-router-dom'
 
 enum PageNames {
@@ -33,10 +34,14 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
         this.onMenuItemClick = this.onMenuItemClick.bind(this);
         this.onSignOutClick = this.onSignOutClick.bind(this);
         this.onProdutoSelected = this.onProdutoSelected.bind(this);
-        this.onProdutoAdd = this.onProdutoAdd.bind(this);
+        this.onProdutoAddRemove = this.onProdutoAddRemove.bind(this);
         this.onItemCarrinhoRemove = this.onItemCarrinhoRemove.bind(this);
         this.renderProdutoDetalhes = this.renderProdutoDetalhes.bind(this);
         this.renderCarrinho = this.renderCarrinho.bind(this);
+        this.renderFinalizarCompra = this.renderFinalizarCompra.bind(this);
+        this.renderLogin = this.renderLogin.bind(this);
+
+        this.getCarrinhoCount = this.getCarrinhoCount.bind(this);
 
         this.state = { logado: false, carrinho: [] };
 
@@ -60,18 +65,23 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
         this.setState(Object.assign(this.state, { pagina: PageNames.ProdutoDetalhes, id: id }));
     }
 
-    onProdutoAdd(produto: Produto) {
+    onProdutoAddRemove(produto: Produto, operation: OperationType) {
         var carrinho = this.state.carrinho.slice(0);
         var itemCarrinho = carrinho.filter(ic => ic.produto.id == produto.id).pop();
 
         if (itemCarrinho != null) {
             var idx = carrinho.indexOf(itemCarrinho);
-            carrinho[idx] = Object.assign(itemCarrinho, { qtd: itemCarrinho.qtd + 1 });
+            carrinho[idx] = Object.assign(itemCarrinho, { qtd: itemCarrinho.qtd + (operation == OperationType.Add ? 1 : -1) });
+            if (carrinho[idx].qtd <= 0) {
+                carrinho.splice(idx, 1);
+            }
         } else {
-            itemCarrinho = new ItemCarrinho();
-            itemCarrinho.produto = produto;
-            itemCarrinho.qtd = 1;
-            carrinho.push(itemCarrinho);
+            if (operation == OperationType.Add) {
+                itemCarrinho = new ItemCarrinho();
+                itemCarrinho.produto = produto;
+                itemCarrinho.qtd = 1;
+                carrinho.push(itemCarrinho);
+            }
         }
 
         this.setState(Object.assign(this.state, { carrinho: carrinho }));
@@ -95,7 +105,7 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
 
     onItemCarrinhoRemove(itemCarrinho: ItemCarrinho) {
         var index = this.state.carrinho.findIndex(ic => ic.produto.id == itemCarrinho.produto.id);
-        var carrinho = [...this.state.carrinho];
+        var carrinho = this.state.carrinho.slice(0);
         carrinho.splice(index, 1);
         this.setState(Object.assign(this.state, { carrinho: carrinho }));
     }
@@ -104,15 +114,42 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
         return this.ds.getProdutoById(id);
     }
 
+    getProdutoQtd(id: Number): number {
+        var itemCarrinho = this.state.carrinho.filter(it => it.produto.id == id);
+
+        if (itemCarrinho.length > 0) {
+            return itemCarrinho[0].qtd;
+        }
+
+        return 0;
+    }
+
+    getCarrinhoCount() {
+        var total = 0;
+        for (let index = 0; index < this.state.carrinho.length; index++) {
+            const item = this.state.carrinho[index];
+            total += item.qtd;
+        }
+        return total;
+    }
+
     renderProdutoDetalhes(info) {
         // component={(info) => ()
         return (<div key={info.match.params.id}>
-            <ProdutoDetalhes produto={this.getProduto(info.match.params.id)} onProdutoAdd={this.onProdutoAdd} />
+            <ProdutoDetalhes produto={this.getProduto(info.match.params.id)} qtd={this.getProdutoQtd(info.match.params.id)} onProdutoAddRemove={this.onProdutoAddRemove} />
         </div>);
     }
 
     renderCarrinho(info) {
         return (<Carrinho produtos={this.state.carrinho} onProdutoRemove={this.onItemCarrinhoRemove} />);
+    }
+
+    renderFinalizarCompra(info) {
+        return (<FinalizarCompra logado={this.state.logado} carrinho={this.state.carrinho} />);
+    }
+
+    renderLogin(info) {
+        return (<Login onSuccess={this.onLoginSuccess} />);
     }
 
     render() {
@@ -125,7 +162,7 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
                 {/* <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Home} onClick={this.onMenuItemClick}>Início</a> */}
                 <NavLink to="/produtos" className="p-2 text-dark">Produtos</NavLink>
                 {/* <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Produtos} onClick={this.onMenuItemClick}>Produtos</a> */}
-                <NavLink to="/carrinho" className="p-2 text-dark">Carrinho</NavLink>
+                <NavLink to="/carrinho" className="p-2 text-dark">🛒</NavLink>
                 {/* <a className="p-2 text-dark icone-carrinho" href="#" data-pagina_id={PageNames.Carrinho} onClick={this.onMenuItemClick} title="Carrinho"></a> */}
                 {/* <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Preferences} onClick={this.onMenuItemClick}>Configurações</a> */}
             </nav>
@@ -145,8 +182,9 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
                             <Route path="/produtos" component={Produtos} />
                             <Route path="/produto_detalhes/:id" component={this.renderProdutoDetalhes} />
                             <Route path="/carrinho" component={this.renderCarrinho} />
-                            <Route path="/login" component={Login} />
+                            <Route path="/finalizar_compra" component={this.renderFinalizarCompra} />
                             <Route path="/compra_finalizada" component={CompraFinalizada} />
+                            <Route path="/login" component={this.renderLogin} />
                             <Route path="*" component={(<div>404</div>)} />
                         </Switch>
                     </div>

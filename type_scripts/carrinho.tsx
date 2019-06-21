@@ -13,35 +13,22 @@ export class Carrinho extends React.Component<{ produtos: ItemCarrinho[], onProd
     constructor(props) {
         super(props);
 
-        var total = 0;
-        for (var i = 0; i < this.props.produtos.length; i++) {
-            var itemCarrinho = this.props.produtos[i];
-            total += itemCarrinho.produto.valor * itemCarrinho.qtd;
-        }
-
-        this.state = { total: total };
+        this.calculateTotal = this.calculateTotal.bind(this);
     }
-
-    carregaProdutos() {
-        utils.postJSON("/produtos", { emEstoque: true }).done(((produtos: Produto[]) => {
-            this.setState(Object.assign(this.state, { produtos: produtos }));
-        }).bind(this));
-    }
-
-    // onProdutoClick(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    //     // debugger;
-    //     var pid = parseInt(ev.currentTarget.getAttribute("data-produtoid"));
-    //     var produto = this.state.produtos.filter(p => p.id == pid).pop();
-    //     console.log(produto.nome);
-    //     // this.props.onProdutoSelected(pid);
-    // }
 
     onProdutoRemove(ic: ItemCarrinho) {
         this.props.onProdutoRemove(ic);
     }
 
-    componentDidUpdate(a, b) {
-        debugger;
+    calculateTotal() {
+        var total = 0;
+
+        for (var i = 0; i < this.props.produtos.length; i++) {
+            var itemCarrinho = this.props.produtos[i];
+            total += itemCarrinho.produto.valor * itemCarrinho.qtd;
+        }
+
+        return total;
     }
 
     render() {
@@ -67,8 +54,8 @@ export class Carrinho extends React.Component<{ produtos: ItemCarrinho[], onProd
                             </div>
                         ))}
                         <div className="col-sm-12" style={{ textAlign: "right", padding: "5px" }} >
-                            <h1>R$ {this.state.total.toFixed(2)}</h1>
-                            <NavLink to="/compra_finalizada" className="btn btn-primary btn-lg">Finalizar Compra</NavLink>
+                            <h1>R$ {this.calculateTotal().toFixed(2)}</h1>
+                            <NavLink to="/finalizar_compra" className="btn btn-primary btn-lg">Finalizar Compra</NavLink>
                         </div>
                     </div>
                     ))}

@@ -1,8 +1,10 @@
-import * as React from 'react'
+import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as utils from './utils';
 import { Produto } from './models';
-import { NavLink, Router } from 'react-router-dom';
+import { NavLink, Router, Redirect } from 'react-router-dom';
+import { Login } from './login';
+import * as queryString from 'querystring';
 
 export class CompraFinalizada extends React.Component<{}, {}> {
     constructor(props) {

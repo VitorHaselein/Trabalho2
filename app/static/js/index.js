@@ -12919,6 +12919,215 @@ module.exports = ReactPropTypesSecret;
 
 /***/ }),
 
+/***/ "./node_modules/querystring-es3/decode.js":
+/*!************************************************!*\
+  !*** ./node_modules/querystring-es3/decode.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+// If obj.hasOwnProperty has been overridden, then calling
+// obj.hasOwnProperty(prop) will break.
+// See: https://github.com/joyent/node/issues/1707
+function hasOwnProperty(obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+
+module.exports = function(qs, sep, eq, options) {
+  sep = sep || '&';
+  eq = eq || '=';
+  var obj = {};
+
+  if (typeof qs !== 'string' || qs.length === 0) {
+    return obj;
+  }
+
+  var regexp = /\+/g;
+  qs = qs.split(sep);
+
+  var maxKeys = 1000;
+  if (options && typeof options.maxKeys === 'number') {
+    maxKeys = options.maxKeys;
+  }
+
+  var len = qs.length;
+  // maxKeys <= 0 means that we should not limit keys count
+  if (maxKeys > 0 && len > maxKeys) {
+    len = maxKeys;
+  }
+
+  for (var i = 0; i < len; ++i) {
+    var x = qs[i].replace(regexp, '%20'),
+        idx = x.indexOf(eq),
+        kstr, vstr, k, v;
+
+    if (idx >= 0) {
+      kstr = x.substr(0, idx);
+      vstr = x.substr(idx + 1);
+    } else {
+      kstr = x;
+      vstr = '';
+    }
+
+    k = decodeURIComponent(kstr);
+    v = decodeURIComponent(vstr);
+
+    if (!hasOwnProperty(obj, k)) {
+      obj[k] = v;
+    } else if (isArray(obj[k])) {
+      obj[k].push(v);
+    } else {
+      obj[k] = [obj[k], v];
+    }
+  }
+
+  return obj;
+};
+
+var isArray = Array.isArray || function (xs) {
+  return Object.prototype.toString.call(xs) === '[object Array]';
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/querystring-es3/encode.js":
+/*!************************************************!*\
+  !*** ./node_modules/querystring-es3/encode.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+var stringifyPrimitive = function(v) {
+  switch (typeof v) {
+    case 'string':
+      return v;
+
+    case 'boolean':
+      return v ? 'true' : 'false';
+
+    case 'number':
+      return isFinite(v) ? v : '';
+
+    default:
+      return '';
+  }
+};
+
+module.exports = function(obj, sep, eq, name) {
+  sep = sep || '&';
+  eq = eq || '=';
+  if (obj === null) {
+    obj = undefined;
+  }
+
+  if (typeof obj === 'object') {
+    return map(objectKeys(obj), function(k) {
+      var ks = encodeURIComponent(stringifyPrimitive(k)) + eq;
+      if (isArray(obj[k])) {
+        return map(obj[k], function(v) {
+          return ks + encodeURIComponent(stringifyPrimitive(v));
+        }).join(sep);
+      } else {
+        return ks + encodeURIComponent(stringifyPrimitive(obj[k]));
+      }
+    }).join(sep);
+
+  }
+
+  if (!name) return '';
+  return encodeURIComponent(stringifyPrimitive(name)) + eq +
+         encodeURIComponent(stringifyPrimitive(obj));
+};
+
+var isArray = Array.isArray || function (xs) {
+  return Object.prototype.toString.call(xs) === '[object Array]';
+};
+
+function map (xs, f) {
+  if (xs.map) return xs.map(f);
+  var res = [];
+  for (var i = 0; i < xs.length; i++) {
+    res.push(f(xs[i], i));
+  }
+  return res;
+}
+
+var objectKeys = Object.keys || function (obj) {
+  var res = [];
+  for (var key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) res.push(key);
+  }
+  return res;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/querystring-es3/index.js":
+/*!***********************************************!*\
+  !*** ./node_modules/querystring-es3/index.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.decode = exports.parse = __webpack_require__(/*! ./decode */ "./node_modules/querystring-es3/decode.js");
+exports.encode = exports.stringify = __webpack_require__(/*! ./encode */ "./node_modules/querystring-es3/encode.js");
+
+
+/***/ }),
+
 /***/ "./node_modules/react-dom/cjs/react-dom.development.js":
 /*!*************************************************************!*\
   !*** ./node_modules/react-dom/cjs/react-dom.development.js ***!
@@ -34514,7 +34723,7 @@ if (false) {} else {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39388,7 +39597,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var utils = __webpack_require__(/*! ./utils */ "./type_scripts/utils.tsx");
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 var ItemCarrinho = /** @class */ (function () {
     function ItemCarrinho() {
@@ -39400,32 +39608,19 @@ var Carrinho = /** @class */ (function (_super) {
     __extends(Carrinho, _super);
     function Carrinho(props) {
         var _this = _super.call(this, props) || this;
-        var total = 0;
-        for (var i = 0; i < _this.props.produtos.length; i++) {
-            var itemCarrinho = _this.props.produtos[i];
-            total += itemCarrinho.produto.valor * itemCarrinho.qtd;
-        }
-        _this.state = { total: total };
+        _this.calculateTotal = _this.calculateTotal.bind(_this);
         return _this;
     }
-    Carrinho.prototype.carregaProdutos = function () {
-        var _this = this;
-        utils.postJSON("/produtos", { emEstoque: true }).done((function (produtos) {
-            _this.setState(Object.assign(_this.state, { produtos: produtos }));
-        }).bind(this));
-    };
-    // onProdutoClick(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    //     // debugger;
-    //     var pid = parseInt(ev.currentTarget.getAttribute("data-produtoid"));
-    //     var produto = this.state.produtos.filter(p => p.id == pid).pop();
-    //     console.log(produto.nome);
-    //     // this.props.onProdutoSelected(pid);
-    // }
     Carrinho.prototype.onProdutoRemove = function (ic) {
         this.props.onProdutoRemove(ic);
     };
-    Carrinho.prototype.componentDidUpdate = function (a, b) {
-        debugger;
+    Carrinho.prototype.calculateTotal = function () {
+        var total = 0;
+        for (var i = 0; i < this.props.produtos.length; i++) {
+            var itemCarrinho = this.props.produtos[i];
+            total += itemCarrinho.produto.valor * itemCarrinho.qtd;
+        }
+        return total;
     };
     Carrinho.prototype.render = function () {
         var _this = this;
@@ -39446,8 +39641,8 @@ var Carrinho = /** @class */ (function (_super) {
                 React.createElement("div", { className: "col-sm-12", style: { textAlign: "right", padding: "5px" } },
                     React.createElement("h1", null,
                         "R$ ",
-                        this.state.total.toFixed(2)),
-                    React.createElement(react_router_dom_1.NavLink, { to: "/compra_finalizada", className: "btn btn-primary btn-lg" }, "Finalizar Compra")))))));
+                        this.calculateTotal().toFixed(2)),
+                    React.createElement(react_router_dom_1.NavLink, { to: "/finalizar_compra", className: "btn btn-primary btn-lg" }, "Finalizar Compra")))))));
     };
     return Carrinho;
 }(React.Component));
@@ -39533,6 +39728,72 @@ var DataSource = /** @class */ (function () {
     return DataSource;
 }());
 exports.DataSource = DataSource;
+
+
+/***/ }),
+
+/***/ "./type_scripts/finalizar_compra.tsx":
+/*!*******************************************!*\
+  !*** ./type_scripts/finalizar_compra.tsx ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+var queryString = __webpack_require__(/*! querystring */ "./node_modules/querystring-es3/index.js");
+var FinalizarCompra = /** @class */ (function (_super) {
+    __extends(FinalizarCompra, _super);
+    function FinalizarCompra(props) {
+        var _this = _super.call(this, props) || this;
+        var values = queryString.parse(document.location.search);
+        return _this;
+    }
+    FinalizarCompra.prototype.getTotal = function () {
+        var total = 0;
+        for (var index = 0; index < this.props.carrinho.length; index++) {
+            var itemCarrinho = this.props.carrinho[index];
+            total += itemCarrinho.qtd * itemCarrinho.produto.valor;
+        }
+        return total;
+    };
+    FinalizarCompra.prototype.render = function () {
+        if (this.props.logado) {
+            return (React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } },
+                React.createElement("div", { className: "col-sm-12" },
+                    React.createElement("h3", { style: { color: "gray" } }, "Finalizar Compra"),
+                    React.createElement("h5", { style: { width: "100%" } }, "Verifique os dados do pedido abaixo e clique em \"Confirmar Pagamento\"."),
+                    React.createElement("br", null),
+                    React.createElement("h3", null, "Total:"),
+                    React.createElement("h1", null, "R$: " + this.getTotal().toFixed(2)),
+                    React.createElement("br", null),
+                    React.createElement("ul", null, this.props.carrinho.map(function (ic) { return (React.createElement("li", { key: ic.produto.id }, ic.qtd + " X " + ic.produto.nome)); })),
+                    React.createElement(react_router_dom_1.NavLink, { to: "/compra_finalizada", class: "btn btn-primary btn-lg" }, "Confirmar Pagamento"),
+                    React.createElement(react_router_dom_1.NavLink, { to: "/carrinho", style: { marginLeft: "30px" } }, "Voltar para o carrinho"))));
+        }
+        else {
+            return (React.createElement(react_router_dom_1.Redirect, { to: '/login?redirectTo=/finalizar_compra' }));
+        }
+    };
+    return FinalizarCompra;
+}(React.Component));
+exports.FinalizarCompra = FinalizarCompra;
 
 
 /***/ }),
@@ -39673,11 +39934,18 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var utils = __webpack_require__(/*! ./utils */ "./type_scripts/utils.tsx");
+var queryString = __webpack_require__(/*! querystring */ "./node_modules/querystring-es3/index.js");
+var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 var Login = /** @class */ (function (_super) {
     __extends(Login, _super);
     function Login(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = { login: "", senha: "" };
+        var afterLoginRedirectTo = "";
+        var values = queryString.parse(document.location.search.substring(1));
+        if (values["redirectTo"]) {
+            afterLoginRedirectTo = values["redirectTo"].toString();
+        }
+        _this.state = { login: "", senha: "", redirectTo: "", afterLoginRedirectTo: afterLoginRedirectTo };
         _this.onLoginChange = _this.onLoginChange.bind(_this);
         _this.onSenhaChange = _this.onSenhaChange.bind(_this);
         _this.onClick = _this.onClick.bind(_this);
@@ -39693,27 +39961,31 @@ var Login = /** @class */ (function (_super) {
         var _this = this;
         utils.postJSON("/login", { login: this.state.login, senha: this.state.senha }).done((function (response) {
             if (response.success) {
-                _this.props.onSuccess(_this.state.login);
+                if (_this.props.onSuccess)
+                    _this.props.onSuccess(_this.state.login);
+                _this.setState(Object.assign(_this.state, { redirectTo: _this.state.afterLoginRedirectTo }));
             }
         }).bind(this));
     };
     Login.prototype.render = function () {
         var _this = this;
-        return (React.createElement("div", { className: "container" },
-            React.createElement("div", { className: "row" },
-                React.createElement("div", { className: "col-sm-4", style: { paddingTop: "140px" } }, " "),
-                React.createElement("div", { className: "col-sm-4", style: { paddingTop: "140px" } },
-                    React.createElement("div", { className: "account-wall", style: { padding: "10px", paddingBottom: "40px" } },
-                        React.createElement("img", { className: "profile-img", src: "../static/images/login.jpg", alt: "" }),
-                        React.createElement("div", null,
-                            React.createElement("input", { type: "text", name: "login", id: "login", className: "form-control", placeholder: "Email", required: true, value: this.state.login, onChange: this.onLoginChange }),
-                            React.createElement("input", { type: "password", name: "senha", id: "senha", className: "form-control", placeholder: "Senha", required: true, value: this.state.senha, onChange: this.onSenhaChange, onKeyPress: (function (e) {
-                                    if (e.keyCode == 13)
-                                        _this.onClick(null);
-                                }).bind(this) }),
-                            React.createElement("button", { className: "btn btn-lg btn-primary btn-block", type: "submit", style: { marginBottom: "15px" }, onClick: this.onClick }, "Entrar"),
-                            React.createElement("a", { href: "#", style: { "float": "left" } }, "Criar Conta"),
-                            React.createElement("a", { href: "#", style: { "float": "right" } }, "Esquecia a senha")))))));
+        return ((this.state.redirectTo ?
+            (React.createElement(react_router_dom_1.Redirect, { to: this.state.redirectTo })) :
+            React.createElement("div", { className: "container" },
+                React.createElement("div", { className: "row" },
+                    React.createElement("div", { className: "col-sm-4", style: { paddingTop: "140px" } }, " "),
+                    React.createElement("div", { className: "col-sm-4", style: { paddingTop: "140px" } },
+                        React.createElement("div", { className: "account-wall", style: { padding: "10px", paddingBottom: "40px" } },
+                            React.createElement("img", { className: "profile-img", src: "../static/images/login.jpg", alt: "" }),
+                            React.createElement("div", null,
+                                React.createElement("input", { type: "text", name: "login", id: "login", className: "form-control", placeholder: "Email", required: true, value: this.state.login, onChange: this.onLoginChange }),
+                                React.createElement("input", { type: "password", name: "senha", id: "senha", className: "form-control", placeholder: "Senha", required: true, value: this.state.senha, onChange: this.onSenhaChange, onKeyPress: (function (e) {
+                                        if (e.keyCode == 13)
+                                            _this.onClick(null);
+                                    }).bind(this) }),
+                                React.createElement("button", { className: "btn btn-lg btn-primary btn-block", type: "submit", style: { marginBottom: "15px" }, onClick: this.onClick }, "Entrar"),
+                                React.createElement("a", { href: "#", style: { "float": "left" } }, "Criar Conta"),
+                                React.createElement("a", { href: "#", style: { "float": "right" } }, "Esquecia a senha"))))))));
     };
     return Login;
 }(React.Component));
@@ -39752,9 +40024,10 @@ var produtos_1 = __webpack_require__(/*! ./produtos */ "./type_scripts/produtos.
 var produto_detalhes_1 = __webpack_require__(/*! ./produto_detalhes */ "./type_scripts/produto_detalhes.tsx");
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 var carrinho_1 = __webpack_require__(/*! ./carrinho */ "./type_scripts/carrinho.tsx");
-var compra_finalizada_1 = __webpack_require__(/*! ./compra_finalizada */ "./type_scripts/compra_finalizada.tsx");
+var finalizar_compra_1 = __webpack_require__(/*! ./finalizar_compra */ "./type_scripts/finalizar_compra.tsx");
 var dataSource_1 = __webpack_require__(/*! ./dataSource */ "./type_scripts/dataSource.tsx");
 var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var compra_finalizada_1 = __webpack_require__(/*! ./compra_finalizada */ "./type_scripts/compra_finalizada.tsx");
 // import { BrowserRouter } from 'react-router-dom'
 var PageNames;
 (function (PageNames) {
@@ -39775,10 +40048,13 @@ var Master = /** @class */ (function (_super) {
         _this.onMenuItemClick = _this.onMenuItemClick.bind(_this);
         _this.onSignOutClick = _this.onSignOutClick.bind(_this);
         _this.onProdutoSelected = _this.onProdutoSelected.bind(_this);
-        _this.onProdutoAdd = _this.onProdutoAdd.bind(_this);
+        _this.onProdutoAddRemove = _this.onProdutoAddRemove.bind(_this);
         _this.onItemCarrinhoRemove = _this.onItemCarrinhoRemove.bind(_this);
         _this.renderProdutoDetalhes = _this.renderProdutoDetalhes.bind(_this);
         _this.renderCarrinho = _this.renderCarrinho.bind(_this);
+        _this.renderFinalizarCompra = _this.renderFinalizarCompra.bind(_this);
+        _this.renderLogin = _this.renderLogin.bind(_this);
+        _this.getCarrinhoCount = _this.getCarrinhoCount.bind(_this);
         _this.state = { logado: false, carrinho: [] };
         _this.ds.getProdutos();
         return _this;
@@ -39796,18 +40072,23 @@ var Master = /** @class */ (function (_super) {
     Master.prototype.onProdutoSelected = function (id) {
         this.setState(Object.assign(this.state, { pagina: PageNames.ProdutoDetalhes, id: id }));
     };
-    Master.prototype.onProdutoAdd = function (produto) {
+    Master.prototype.onProdutoAddRemove = function (produto, operation) {
         var carrinho = this.state.carrinho.slice(0);
         var itemCarrinho = carrinho.filter(function (ic) { return ic.produto.id == produto.id; }).pop();
         if (itemCarrinho != null) {
             var idx = carrinho.indexOf(itemCarrinho);
-            carrinho[idx] = Object.assign(itemCarrinho, { qtd: itemCarrinho.qtd + 1 });
+            carrinho[idx] = Object.assign(itemCarrinho, { qtd: itemCarrinho.qtd + (operation == produto_detalhes_1.OperationType.Add ? 1 : -1) });
+            if (carrinho[idx].qtd <= 0) {
+                carrinho.splice(idx, 1);
+            }
         }
         else {
-            itemCarrinho = new carrinho_1.ItemCarrinho();
-            itemCarrinho.produto = produto;
-            itemCarrinho.qtd = 1;
-            carrinho.push(itemCarrinho);
+            if (operation == produto_detalhes_1.OperationType.Add) {
+                itemCarrinho = new carrinho_1.ItemCarrinho();
+                itemCarrinho.produto = produto;
+                itemCarrinho.qtd = 1;
+                carrinho.push(itemCarrinho);
+            }
         }
         this.setState(Object.assign(this.state, { carrinho: carrinho }));
     };
@@ -39829,20 +40110,41 @@ var Master = /** @class */ (function (_super) {
     };
     Master.prototype.onItemCarrinhoRemove = function (itemCarrinho) {
         var index = this.state.carrinho.findIndex(function (ic) { return ic.produto.id == itemCarrinho.produto.id; });
-        var carrinho = this.state.carrinho.slice();
+        var carrinho = this.state.carrinho.slice(0);
         carrinho.splice(index, 1);
         this.setState(Object.assign(this.state, { carrinho: carrinho }));
     };
     Master.prototype.getProduto = function (id) {
         return this.ds.getProdutoById(id);
     };
+    Master.prototype.getProdutoQtd = function (id) {
+        var itemCarrinho = this.state.carrinho.filter(function (it) { return it.produto.id == id; });
+        if (itemCarrinho.length > 0) {
+            return itemCarrinho[0].qtd;
+        }
+        return 0;
+    };
+    Master.prototype.getCarrinhoCount = function () {
+        var total = 0;
+        for (var index = 0; index < this.state.carrinho.length; index++) {
+            var item = this.state.carrinho[index];
+            total += item.qtd;
+        }
+        return total;
+    };
     Master.prototype.renderProdutoDetalhes = function (info) {
         // component={(info) => ()
         return (React.createElement("div", { key: info.match.params.id },
-            React.createElement(produto_detalhes_1.ProdutoDetalhes, { produto: this.getProduto(info.match.params.id), onProdutoAdd: this.onProdutoAdd })));
+            React.createElement(produto_detalhes_1.ProdutoDetalhes, { produto: this.getProduto(info.match.params.id), qtd: this.getProdutoQtd(info.match.params.id), onProdutoAddRemove: this.onProdutoAddRemove })));
     };
     Master.prototype.renderCarrinho = function (info) {
         return (React.createElement(carrinho_1.Carrinho, { produtos: this.state.carrinho, onProdutoRemove: this.onItemCarrinhoRemove }));
+    };
+    Master.prototype.renderFinalizarCompra = function (info) {
+        return (React.createElement(finalizar_compra_1.FinalizarCompra, { logado: this.state.logado, carrinho: this.state.carrinho }));
+    };
+    Master.prototype.renderLogin = function (info) {
+        return (React.createElement(login_1.Login, { onSuccess: this.onLoginSuccess }));
     };
     Master.prototype.render = function () {
         var menu = (React.createElement("div", { className: "d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom box-shadow header " },
@@ -39851,7 +40153,7 @@ var Master = /** @class */ (function (_super) {
                     React.createElement("b", null, "AMIGO PET"))),
             React.createElement("nav", { className: "my-2 my-md-0 mr-md-3" },
                 React.createElement(react_router_dom_1.NavLink, { to: "/produtos", className: "p-2 text-dark" }, "Produtos"),
-                React.createElement(react_router_dom_1.NavLink, { to: "/carrinho", className: "p-2 text-dark" }, "Carrinho")),
+                React.createElement(react_router_dom_1.NavLink, { to: "/carrinho", className: "p-2 text-dark" }, "\uD83D\uDED2")),
             React.createElement("a", { className: "btn btn-outline-primary", href: "#", onClick: this.onSignOutClick },
                 this.state.logado ? "Sair" : "Entrar",
                 " ")));
@@ -39866,8 +40168,9 @@ var Master = /** @class */ (function (_super) {
                             React.createElement(react_router_dom_1.Route, { path: "/produtos", component: produtos_1.Produtos }),
                             React.createElement(react_router_dom_1.Route, { path: "/produto_detalhes/:id", component: this.renderProdutoDetalhes }),
                             React.createElement(react_router_dom_1.Route, { path: "/carrinho", component: this.renderCarrinho }),
-                            React.createElement(react_router_dom_1.Route, { path: "/login", component: login_1.Login }),
+                            React.createElement(react_router_dom_1.Route, { path: "/finalizar_compra", component: this.renderFinalizarCompra }),
                             React.createElement(react_router_dom_1.Route, { path: "/compra_finalizada", component: compra_finalizada_1.CompraFinalizada }),
+                            React.createElement(react_router_dom_1.Route, { path: "/login", component: this.renderLogin }),
                             React.createElement(react_router_dom_1.Route, { path: "*", component: (React.createElement("div", null, "404")) }))))));
         }
     };
@@ -39915,25 +40218,26 @@ var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 //         this.preco = preco;
 //     }
 // }
+var OperationType;
+(function (OperationType) {
+    OperationType[OperationType["Add"] = 1] = "Add";
+    OperationType[OperationType["Remove"] = 2] = "Remove";
+})(OperationType = exports.OperationType || (exports.OperationType = {}));
 var ProdutoDetalhes = /** @class */ (function (_super) {
     __extends(ProdutoDetalhes, _super);
     function ProdutoDetalhes(props) {
         var _this = _super.call(this, props) || this;
-        _this.onProdutoClick = _this.onProdutoClick.bind(_this);
+        _this.onAddProdutoClick = _this.onAddProdutoClick.bind(_this);
+        _this.onRemoveProdutoClick = _this.onRemoveProdutoClick.bind(_this);
         return _this;
     }
-    ProdutoDetalhes.prototype.onProdutoClick = function (ev) {
+    ProdutoDetalhes.prototype.onAddProdutoClick = function (ev) {
         var pid = parseInt(ev.currentTarget.getAttribute("data-produtoid"));
-        this.props.onProdutoAdd(this.props.produto);
+        this.props.onProdutoAddRemove(this.props.produto, OperationType.Add);
     };
-    ProdutoDetalhes.prototype.componentDidUpdate = function (prevProps, prevState) {
-        debugger;
-    };
-    ProdutoDetalhes.prototype.componentDidMount = function () {
-        // debugger;
-    };
-    ProdutoDetalhes.prototype.componentWillUpdate = function (a, b, c) {
-        debugger;
+    ProdutoDetalhes.prototype.onRemoveProdutoClick = function (ev) {
+        var pid = parseInt(ev.currentTarget.getAttribute("data-produtoid"));
+        this.props.onProdutoAddRemove(this.props.produto, OperationType.Remove);
     };
     ProdutoDetalhes.prototype.render = function () {
         if (this.props.produto != null) {
@@ -39941,18 +40245,20 @@ var ProdutoDetalhes = /** @class */ (function (_super) {
                 React.createElement("div", { className: "col-sm-3", style: { textAlign: "center" } },
                     React.createElement("div", null,
                         React.createElement("img", { key: this.props.produto.id, style: { height: "160px", backgroundColor: "#ccc", minWidth: "100px" }, src: "../static/images/" + this.props.produto.imagem })),
-                    React.createElement("button", { className: "btn btn-primary", "data-produtoid": this.props.produto.id, onClick: this.onProdutoClick }, "Adicionar no Carrinho")),
+                    React.createElement("button", { className: "btn btn-primary", "data-produtoid": this.props.produto.id, onClick: this.onAddProdutoClick }, "Adicionar no Carrinho"),
+                    React.createElement("button", { className: "btn btn-danger btn-sm", "data-produtoid": this.props.produto.id, onClick: this.onRemoveProdutoClick, style: { marginTop: "5px" }, disabled: (this.props.qtd <= 0) }, "Remover no Carrinho")),
                 React.createElement("div", { className: "col-sm-8", style: { textAlign: "left" } },
                     React.createElement("h3", { style: { color: "black" } }, this.props.produto.nome),
                     React.createElement("h5", { style: { color: "#3e0075" } }, "R$ " + this.props.produto.valor),
-                    React.createElement("h5", { style: { color: "gray" } }, "Estoque: " + this.props.produto.qtd))));
+                    React.createElement("h5", { style: { color: "gray" } }, "Estoque: " + this.props.produto.qtd),
+                    React.createElement("h5", { style: { color: "gray" } }, "Quantidade: " + this.props.qtd))));
         }
         else {
             return (React.createElement("div", null, "Buscando dados do produto..."));
         }
     };
     return ProdutoDetalhes;
-}(React.PureComponent));
+}(React.Component));
 exports.ProdutoDetalhes = ProdutoDetalhes;
 
 
