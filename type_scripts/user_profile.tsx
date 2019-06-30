@@ -78,23 +78,25 @@ export class UserProfile extends React.Component<{ id: number }, { usuario: User
     }
 
     resolveCEP() {
-        var cep = this.state.usuario.cep.replace(/[^0-9]+/gi, "");
+        if (this.state.usuario && this.state.usuario.cep) {
+            var cep = this.state.usuario.cep.replace(/[^0-9]+/gi, "");
 
-        if (cep.length >= 8) {
-            var r = jQuery.ajax({
-                url: "https://viacep.com.br/ws/" + cep + "/json/unicode/?callback=callback",
-                jsonp: "callback",
-                dataType: "jsonp"
-            });
+            if (cep.length >= 8) {
+                var r = jQuery.ajax({
+                    url: "https://viacep.com.br/ws/" + cep + "/json/unicode/?callback=callback",
+                    jsonp: "callback",
+                    dataType: "jsonp"
+                });
 
-            r.done(((resposta) => {
-                if (resposta) {
-                    var addr = [resposta.logradouro, resposta.bairro, resposta.localidade, resposta.uf].join(", ");
-                    var newState = Object.assign(this.state);
-                    newState.usuario = Object.assign(newState.usuario, { endereco: addr });
-                    this.setState(newState);
-                }
-            }).bind(this));
+                r.done(((resposta) => {
+                    if (resposta) {
+                        var addr = [resposta.logradouro, resposta.bairro, resposta.localidade, resposta.uf].join(", ");
+                        var newState = Object.assign(this.state);
+                        newState.usuario = Object.assign(newState.usuario, { endereco: addr });
+                        this.setState(newState);
+                    }
+                }).bind(this));
+            }
         }
     }
 

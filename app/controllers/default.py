@@ -3,7 +3,7 @@ from flask import render_template
 from app import app
 from flask import request, redirect, jsonify
 from app import db
-from app.models.tables import User, Produto
+from app.models.tables import User, Produto, ItemVenda, Venda
 from sqlalchemy.ext.declarative import DeclarativeMeta
 
 
@@ -58,7 +58,30 @@ def usuario_save():
     usuario.cep = cep
     db.session.add(usuario)
     db.session.commit()
-    
+
+    return jsonify(True)
+
+
+@app.route("/venda/finalizar", methods=['GET', 'POST'])
+def venda_finalizar():
+    itens_carrinho = request.json["carrinho"]
+    cliente_id = request.json["cliente_id"]
+
+    venda = Venda()
+    venda.cliente_id = cliente_id
+
+    db.session.add(venda)
+    db.session.commit()
+
+    for item_carrinho in itens_carrinho:
+        iv = ItemVenda()
+        iv.cliente_id = cliente_id
+        iv.produto_id = item_carrinho["produto_id"]
+        iv.qtd = item_carrinho["qtd"]
+        db.session.add(iv)
+
+    db.session.commit()
+
     return jsonify(True)
 
 

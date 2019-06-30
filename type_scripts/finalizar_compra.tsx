@@ -22,6 +22,21 @@ export class FinalizarCompra extends React.Component<{ logado: boolean, carrinho
         return total;
     }
 
+    confirmarPagamento() {
+        var dados = {
+            cliente_id: 1,
+            carrinho: this.props.carrinho.map(c => ({
+                produto_id: c.produto.id,
+                qtd: c.qtd,
+            }))
+        };
+
+        utils.postJSON("/vendas/finalizar", dados).done(function () {
+            // Compra finalizada.
+
+        });
+    }
+
     render() {
         if (this.props.logado) {
             return (
@@ -36,7 +51,8 @@ export class FinalizarCompra extends React.Component<{ logado: boolean, carrinho
                         <ul>
                             {this.props.carrinho.map(ic => (<li key={ic.produto.id}>{ic.qtd + " X " + ic.produto.nome}</li>))}
                         </ul>
-                        <NavLink to="/compra_finalizada" class="btn btn-primary btn-lg">Confirmar Pagamento</NavLink>
+                        {/* <NavLink to="/compra_finalizada" class="btn btn-primary btn-lg">Confirmar Pagamento</NavLink> */}
+                        <button className="btn btn-primary btn-lg" onClick={this.confirmarPagamento}>Confirmar Pagamento</button>
                         <NavLink to="/carrinho" style={{ marginLeft: "30px" }}>Voltar para o carrinho</NavLink>
                     </div>
                 </div >

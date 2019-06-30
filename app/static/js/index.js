@@ -39756,6 +39756,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var utils = __webpack_require__(/*! ./utils */ "./type_scripts/utils.tsx");
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 var queryString = __webpack_require__(/*! querystring */ "./node_modules/querystring-es3/index.js");
 var FinalizarCompra = /** @class */ (function (_super) {
@@ -39773,6 +39774,18 @@ var FinalizarCompra = /** @class */ (function (_super) {
         }
         return total;
     };
+    FinalizarCompra.prototype.confirmarPagamento = function () {
+        var dados = {
+            cliente_id: 1,
+            carrinho: this.props.carrinho.map(function (c) { return ({
+                produto_id: c.produto.id,
+                qtd: c.qtd,
+            }); })
+        };
+        utils.postJSON("/vendas/finalizar", dados).done(function () {
+            // Compra finalizada.
+        });
+    };
     FinalizarCompra.prototype.render = function () {
         if (this.props.logado) {
             return (React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } },
@@ -39784,7 +39797,7 @@ var FinalizarCompra = /** @class */ (function (_super) {
                     React.createElement("h1", null, "R$: " + this.getTotal().toFixed(2)),
                     React.createElement("br", null),
                     React.createElement("ul", null, this.props.carrinho.map(function (ic) { return (React.createElement("li", { key: ic.produto.id }, ic.qtd + " X " + ic.produto.nome)); })),
-                    React.createElement(react_router_dom_1.NavLink, { to: "/compra_finalizada", class: "btn btn-primary btn-lg" }, "Confirmar Pagamento"),
+                    React.createElement("button", { className: "btn btn-primary btn-lg", onClick: this.confirmarPagamento }, "Confirmar Pagamento"),
                     React.createElement(react_router_dom_1.NavLink, { to: "/carrinho", style: { marginLeft: "30px" } }, "Voltar para o carrinho"))));
         }
         else {
@@ -40480,21 +40493,23 @@ var UserProfile = /** @class */ (function (_super) {
     };
     UserProfile.prototype.resolveCEP = function () {
         var _this = this;
-        var cep = this.state.usuario.cep.replace(/[^0-9]+/gi, "");
-        if (cep.length >= 8) {
-            var r = jQuery.ajax({
-                url: "https://viacep.com.br/ws/" + cep + "/json/unicode/?callback=callback",
-                jsonp: "callback",
-                dataType: "jsonp"
-            });
-            r.done((function (resposta) {
-                if (resposta) {
-                    var addr = [resposta.logradouro, resposta.bairro, resposta.localidade, resposta.uf].join(", ");
-                    var newState = Object.assign(_this.state);
-                    newState.usuario = Object.assign(newState.usuario, { endereco: addr });
-                    _this.setState(newState);
-                }
-            }).bind(this));
+        if (this.state.usuario && this.state.usuario.cep) {
+            var cep = this.state.usuario.cep.replace(/[^0-9]+/gi, "");
+            if (cep.length >= 8) {
+                var r = jQuery.ajax({
+                    url: "https://viacep.com.br/ws/" + cep + "/json/unicode/?callback=callback",
+                    jsonp: "callback",
+                    dataType: "jsonp"
+                });
+                r.done((function (resposta) {
+                    if (resposta) {
+                        var addr = [resposta.logradouro, resposta.bairro, resposta.localidade, resposta.uf].join(", ");
+                        var newState = Object.assign(_this.state);
+                        newState.usuario = Object.assign(newState.usuario, { endereco: addr });
+                        _this.setState(newState);
+                    }
+                }).bind(this));
+            }
         }
     };
     UserProfile.prototype.render = function () {

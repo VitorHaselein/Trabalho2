@@ -30,6 +30,19 @@ class Produto(db.Model):
     qtd = db.Column(db.Integer)
     imagem = db.Column(db.String)
 
+class Venda(db.Model):
+    __tablename__ = "vendas"
+    id = db.Column(db.Integer, primary_key=True)
+    cliente_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
+class ItemVenda(db.Model):
+    __tablename__ = "item_venda"
+    id = db.Column(db.Integer, primary_key=True)
+    cliente_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    produto_id = db.Column(db.Integer, db.ForeignKey('produto.id'))
+    venda_id = db.Column(db.Integer, db.ForeignKey('vendas.id'))
+    qtd = db.Column(db.Integer)
+
 # class Post(db.Model):
 #     __tablename__ = "posts"
 
