@@ -21,7 +21,7 @@ def login():
     if login != None and senha != None:
         u = User.query.filter_by(username=login, password=senha).first()
         if u != None:
-            return jsonify({"success": True})
+            return jsonify({"success": True, "user": json.dumps(u, cls=AlchemyEncoder)})
     return jsonify({"success": False})
 
 
@@ -62,7 +62,7 @@ def usuario_save():
     return jsonify(True)
 
 
-@app.route("/venda/finalizar", methods=['GET', 'POST'])
+@app.route("/vendas/finalizar", methods=['GET', 'POST'])
 def venda_finalizar():
     itens_carrinho = request.json["carrinho"]
     cliente_id = request.json["cliente_id"]
@@ -75,6 +75,7 @@ def venda_finalizar():
 
     for item_carrinho in itens_carrinho:
         iv = ItemVenda()
+        iv.venda_id = venda.id
         iv.cliente_id = cliente_id
         iv.produto_id = item_carrinho["produto_id"]
         iv.qtd = item_carrinho["qtd"]

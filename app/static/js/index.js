@@ -39763,7 +39763,9 @@ var FinalizarCompra = /** @class */ (function (_super) {
     __extends(FinalizarCompra, _super);
     function FinalizarCompra(props) {
         var _this = _super.call(this, props) || this;
+        _this.state = { goto: "" };
         var values = queryString.parse(document.location.search);
+        _this.confirmarPagamento = _this.confirmarPagamento.bind(_this);
         return _this;
     }
     FinalizarCompra.prototype.getTotal = function () {
@@ -39784,10 +39786,14 @@ var FinalizarCompra = /** @class */ (function (_super) {
         };
         utils.postJSON("/vendas/finalizar", dados).done(function () {
             // Compra finalizada.
-        });
+            this.setState(Object.assign(this.state, { goto: "/compra_finalizada" }));
+        }.bind(this));
     };
     FinalizarCompra.prototype.render = function () {
-        if (this.props.logado) {
+        if (this.state.goto) {
+            return (React.createElement(react_router_dom_1.Redirect, { to: this.state.goto }));
+        }
+        else if (this.props.usuario_logado) {
             return (React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } },
                 React.createElement("div", { className: "col-sm-12" },
                     React.createElement("h3", { style: { color: "gray" } }, "Finalizar Compra"),
@@ -40072,7 +40078,7 @@ var Master = /** @class */ (function (_super) {
         _this.renderFinalizarCompra = _this.renderFinalizarCompra.bind(_this);
         _this.renderLogin = _this.renderLogin.bind(_this);
         _this.getCarrinhoCount = _this.getCarrinhoCount.bind(_this);
-        _this.state = { logado: false, carrinho: [] };
+        _this.state = { usuario_logado: null, carrinho: [] };
         _this.ds.getProdutos();
         return _this;
     }
@@ -40080,11 +40086,11 @@ var Master = /** @class */ (function (_super) {
         var p = parseInt(e.currentTarget.getAttribute("data-pagina_id"));
         this.setState(Object.assign(this.state, { pagina: p }));
     };
-    Master.prototype.onLoginSuccess = function (login) {
-        this.setState(Object.assign(this.state, { logado: true, pagina: PageNames.Home }));
+    Master.prototype.onLoginSuccess = function (usuario) {
+        this.setState(Object.assign(this.state, { usuario_logado: usuario, pagina: PageNames.Home }));
     };
     Master.prototype.onSignOutClick = function (e) {
-        if (this.state.logado) {
+        if (this.state.usuario_logado) {
             this.setState(Object.assign(this.state, { logado: false }));
         }
         else {
@@ -40163,7 +40169,7 @@ var Master = /** @class */ (function (_super) {
         return (React.createElement(carrinho_1.Carrinho, { produtos: this.state.carrinho, onProdutoRemove: this.onItemCarrinhoRemove }));
     };
     Master.prototype.renderFinalizarCompra = function (info) {
-        return (React.createElement(finalizar_compra_1.FinalizarCompra, { logado: this.state.logado, carrinho: this.state.carrinho }));
+        return (React.createElement(finalizar_compra_1.FinalizarCompra, { usuario_logado: this.state.usuario_logado, carrinho: this.state.carrinho }));
     };
     Master.prototype.renderLogin = function (info) {
         return (React.createElement(login_1.Login, { onSuccess: this.onLoginSuccess }));
@@ -40179,7 +40185,7 @@ var Master = /** @class */ (function (_super) {
             React.createElement("nav", { className: "my-2 my-md-0 mr-md-3" },
                 React.createElement(react_router_dom_1.NavLink, { to: "/produtos", className: "p-2 text-dark" }, "Produtos"),
                 React.createElement(react_router_dom_1.NavLink, { to: "/carrinho", className: "p-2 text-dark" }, "\uD83D\uDED2")),
-            (!this.state.logado ? React.createElement(react_router_dom_1.NavLink, { to: "/login", className: "btn btn-outline-primary" }, "Entrar") : React.createElement("a", { href: "#", className: "btn btn-outline-primary", onClick: this.onSignOutClick }, "Sair"))));
+            (!this.state.usuario_logado ? React.createElement(react_router_dom_1.NavLink, { to: "/login", className: "btn btn-outline-primary" }, "Entrar") : React.createElement("a", { href: "#", className: "btn btn-outline-primary", onClick: this.onSignOutClick }, "Sair"))));
         if (false) {}
         else {
             return (React.createElement("div", null,

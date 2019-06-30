@@ -1,16 +1,21 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as utils from './utils';
-import { Produto } from './models';
+import { Produto, User } from './models';
 import { NavLink, Router, Redirect } from 'react-router-dom';
 import { Login } from './login';
 import * as queryString from 'querystring';
 import { ItemCarrinho } from './carrinho';
 
-export class FinalizarCompra extends React.Component<{ logado: boolean, carrinho: ItemCarrinho[] }, {}> {
+export class FinalizarCompra extends React.Component<{ usuario_logado: User, carrinho: ItemCarrinho[] }, { goto: string }> {
     constructor(props) {
         super(props);
+
+        this.state = { goto: "" };
+
         const values = queryString.parse(document.location.search);
+
+        this.confirmarPagamento = this.confirmarPagamento.bind(this);
     }
 
     getTotal() {
@@ -33,12 +38,15 @@ export class FinalizarCompra extends React.Component<{ logado: boolean, carrinho
 
         utils.postJSON("/vendas/finalizar", dados).done(function () {
             // Compra finalizada.
-
-        });
+            this.setState(Object.assign(this.state, { goto: "/compra_finalizada" }));
+        }.bind(this));
     }
 
     render() {
-        if (this.props.logado) {
+        if (this.state.goto) {
+            return (<Redirect to={this.state.goto} />);
+        }
+        else if (this.props.usuario_logado) {
             return (
                 <div className="row" style={{ backgroundColor: "white", padding: "32px" }}>
                     <div className="col-sm-12">

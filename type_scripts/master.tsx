@@ -6,7 +6,7 @@ import { Home } from './home';
 import { Produtos } from './produtos';
 import { ProdutoDetalhes, OperationType } from './produto_detalhes';
 import { BrowserRouter as Router, Switch, Route, NavLink } from 'react-router-dom'
-import { Produto } from './models';
+import { Produto, User } from './models';
 import { ItemCarrinho, Carrinho } from './carrinho';
 import { FinalizarCompra } from './finalizar_compra';
 import { DataSource } from './dataSource';
@@ -24,7 +24,7 @@ enum PageNames {
     ProdutoDetalhes = 5
 }
 
-export class Master extends React.Component<{}, { logado: boolean, carrinho: ItemCarrinho[] }> {
+export class Master extends React.Component<{}, { usuario_logado: User, carrinho: ItemCarrinho[] }> {
     ds: DataSource = new DataSource();
 
     constructor(props) {
@@ -44,7 +44,7 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
 
         this.getCarrinhoCount = this.getCarrinhoCount.bind(this);
 
-        this.state = { logado: false, carrinho: [] };
+        this.state = { usuario_logado: null, carrinho: [] };
 
         this.ds.getProdutos();
     }
@@ -54,12 +54,12 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
         this.setState(Object.assign(this.state, { pagina: p }));
     }
 
-    onLoginSuccess(login: string) {
-        this.setState(Object.assign(this.state, { logado: true, pagina: PageNames.Home }));
+    onLoginSuccess(usuario: User) {
+        this.setState(Object.assign(this.state, { usuario_logado: usuario, pagina: PageNames.Home }));
     }
 
     onSignOutClick(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-        if (this.state.logado) {
+        if (this.state.usuario_logado) {
             this.setState(Object.assign(this.state, { logado: false }));
         } else {
             return
@@ -150,7 +150,7 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
     }
 
     renderFinalizarCompra(info) {
-        return (<FinalizarCompra logado={this.state.logado} carrinho={this.state.carrinho} />);
+        return (<FinalizarCompra usuario_logado={this.state.usuario_logado} carrinho={this.state.carrinho} />);
     }
 
     renderLogin(info) {
@@ -175,11 +175,11 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
                 {/* <a className="p-2 text-dark icone-carrinho" href="#" data-pagina_id={PageNames.Carrinho} onClick={this.onMenuItemClick} title="Carrinho"></a> */}
                 {/* <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Preferences} onClick={this.onMenuItemClick}>Configurações</a> */}
             </nav>
-            {(!this.state.logado ? <NavLink to={"/login"} className="btn btn-outline-primary">Entrar</NavLink> : <a href="#" className="btn btn-outline-primary" onClick={this.onSignOutClick}>Sair</a>)}
+            {(!this.state.usuario_logado ? <NavLink to={"/login"} className="btn btn-outline-primary">Entrar</NavLink> : <a href="#" className="btn btn-outline-primary" onClick={this.onSignOutClick}>Sair</a>)}
         </div>);
 
 
-        if (false && !this.state.logado) {
+        if (false && !this.state.usuario_logado) {
             return <Login onSuccess={this.onLoginSuccess} />
         } else {
             return (<div>
