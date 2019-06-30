@@ -4,24 +4,10 @@ import * as utils from './utils';
 import * as queryString from 'querystring';
 import { NavLink, Router, Redirect } from 'react-router-dom';
 
-export class Login extends React.Component<{ onSuccess: (string) => void }, { login: string, senha: string, redirectTo: string, afterLoginRedirectTo: string }> {
+export class Logout extends React.Component<{ }, { }> {
     constructor(props) {
         super(props);
-        var afterLoginRedirectTo = "";
 
-        const values = queryString.parse(document.location.search.substring(1));
-
-        if (values["redirectTo"]) {
-            afterLoginRedirectTo = values["redirectTo"].toString();
-        } else {
-            afterLoginRedirectTo = "/";
-        }
-
-        this.state = { login: "", senha: "", redirectTo: "", afterLoginRedirectTo: afterLoginRedirectTo };
-
-        this.onLoginChange = this.onLoginChange.bind(this);
-        this.onSenhaChange = this.onSenhaChange.bind(this);
-        this.onClick = this.onClick.bind(this);
     }
 
     onLoginChange(ev: React.ChangeEvent<HTMLInputElement>) {
@@ -59,8 +45,8 @@ export class Login extends React.Component<{ onSuccess: (string) => void }, { lo
                                             this.onClick(null);
                                     }).bind(this)} />
                                     <button className="btn btn-lg btn-primary btn-block" type="submit" style={{ marginBottom: "15px" }} onClick={this.onClick}>Entrar</button>
-                                    <NavLink to={"/new-user"} style={{ "float": "left" }}>Criar Conta</NavLink>
-                                    <NavLink to={"/recover-password"} style={{ "float": "right" }}>Esqueci a Senha</NavLink>
+                                    <a href="#" style={{ "float": "left" }}>Criar Conta</a>
+                                    <a href="#" style={{ "float": "right" }}>Esquecia a senha</a>
                                 </div>
                             </div>
                         </div>

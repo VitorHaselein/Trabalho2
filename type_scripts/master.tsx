@@ -12,6 +12,7 @@ import { FinalizarCompra } from './finalizar_compra';
 import { DataSource } from './dataSource';
 import { useEffect, useRef } from 'react';
 import { CompraFinalizada } from './compra_finalizada';
+import { UserProfile } from './user_profile';
 // import { BrowserRouter } from 'react-router-dom'
 
 enum PageNames {
@@ -58,7 +59,11 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
     }
 
     onSignOutClick(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-        this.setState(Object.assign(this.state, { logado: false }));
+        if (this.state.logado) {
+            this.setState(Object.assign(this.state, { logado: false }));
+        } else {
+            return
+        }
     }
 
     onProdutoSelected(id: number) {
@@ -152,6 +157,10 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
         return (<Login onSuccess={this.onLoginSuccess} />);
     }
 
+    renderUserProfile(info) {
+        return (<UserProfile id={parseInt(info.match.params.id)} />);
+    }
+
     render() {
         var menu = (<div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom box-shadow header " >
             <h5 className="my-0 mr-md-auto font-weight-normal">
@@ -166,7 +175,7 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
                 {/* <a className="p-2 text-dark icone-carrinho" href="#" data-pagina_id={PageNames.Carrinho} onClick={this.onMenuItemClick} title="Carrinho"></a> */}
                 {/* <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Preferences} onClick={this.onMenuItemClick}>Configurações</a> */}
             </nav>
-            <a className="btn btn-outline-primary" href="#" onClick={this.onSignOutClick}>{this.state.logado ? "Sair" : "Entrar"} </a>
+            {(!this.state.logado ? <NavLink to={"/login"} className="btn btn-outline-primary">Entrar</NavLink> : <a href="#" className="btn btn-outline-primary" onClick={this.onSignOutClick}>Sair</a>)}
         </div>);
 
 
@@ -185,6 +194,8 @@ export class Master extends React.Component<{}, { logado: boolean, carrinho: Ite
                             <Route path="/finalizar_compra" component={this.renderFinalizarCompra} />
                             <Route path="/compra_finalizada" component={CompraFinalizada} />
                             <Route path="/login" component={this.renderLogin} />
+                            <Route path="/user/:id" component={this.renderUserProfile} />
+                            <Route path="/new-user" component={this.renderUserProfile} />
                             <Route path="*" component={(<div>404</div>)} />
                         </Switch>
                     </div>

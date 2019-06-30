@@ -39,6 +39,29 @@ def produto_getById(id):
     return jsonify(result[0] if len(result) > 0 else None)
 
 
+@app.route("/usuarios/getById/<id>", methods=['GET', 'POST'])
+def usuario_getById(id):
+    usuario = list(User.query.filter_by(id=id))
+    result = json.loads(json.dumps(usuario, cls=AlchemyEncoder))
+    return jsonify(result[0] if len(result) > 0 else None)
+
+
+@app.route("/usuarios/save", methods=['GET', 'POST'])
+def usuario_save():
+    username = request.json["username"]
+    password = request.json["password"]
+    name = request.json["name"]
+    email = request.json["email"]
+    cep = request.json["cep"]
+
+    usuario = User(username, password, name, email)
+    usuario.cep = cep
+    db.session.add(usuario)
+    db.session.commit()
+    
+    return jsonify(True)
+
+
 class AlchemyEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj.__class__, DeclarativeMeta):

@@ -1,7 +1,8 @@
 import * as $ from 'jquery'
 
 export function postJSON(url, data) {
-    var dataStr = $.isPlainObject(data) || $.isArray(data) ? JSON.stringify(data) : data.toString();
+    // var dataStr = $.isPlainObject(data) || $.isArray(data) ? JSON.stringify(data) : data.toString();
+    var dataStr = JSON.stringify(data); 
 
     return $.ajax({
         type: 'POST',

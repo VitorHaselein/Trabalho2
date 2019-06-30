@@ -39853,22 +39853,22 @@ var Home = /** @class */ (function (_super) {
                     React.createElement("div", { className: "carousel-inner" },
                         React.createElement("div", { className: "carousel-item active" },
                             React.createElement("div", { className: "" },
-                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/bunner.jpg" }))),
+                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "340px" }, src: "../static/images/bunner.jpg" }))),
                         React.createElement("div", { className: "carousel-item" },
                             React.createElement("div", { className: "" },
-                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/Kit-Shampoo-Colonia-e-Condicionador-Sanol-Dog-2.png" })),
+                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "340px" }, src: "../static/images/Kit-Shampoo-Colonia-e-Condicionador-Sanol-Dog-2.png" })),
                             React.createElement("div", { className: "carousel-caption text-left", style: { color: "black" } },
                                 React.createElement("h1", { title: "Variadas marcas de shampoo." }, "Shampoos"),
                                 React.createElement("p", null,
                                     React.createElement("a", { className: "btn btn-lg btn-primary", href: "#", role: "button" }, "Sign up today")))),
                         React.createElement("div", { className: "carousel-item" },
                             React.createElement("div", { className: "" },
-                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/brinquedo-arranhador-para-gatos-creme-cbr03327-11825217.jpg" })),
+                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "340px" }, src: "../static/images/brinquedo-arranhador-para-gatos-creme-cbr03327-11825217.jpg" })),
                             React.createElement("div", { className: "carousel-caption text-left", style: { color: "black" } },
                                 React.createElement("h1", { title: "Ra\u00E7\u00F5es, Brinquedos, Vacinas e muito mais." }, "Produtos para todos os seus PETS!"))),
                         React.createElement("div", { className: "carousel-item" },
                             React.createElement("div", { className: "" },
-                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "400px" }, src: "../static/images/guardar-brinquedos-2.png" })))))),
+                                React.createElement("img", { className: "d-block", style: { margin: "auto", height: "340px" }, src: "../static/images/guardar-brinquedos-2.png" })))))),
             React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } }, this.state.produtos.length <= 0 ?
                 (React.createElement("div", null, "Carregando...")) :
                 (this.state.produtos.slice(0, 4).map(function (p) { return (React.createElement("div", { key: p.id, className: "col-sm-3", style: { textAlign: "center" } },
@@ -39945,6 +39945,9 @@ var Login = /** @class */ (function (_super) {
         if (values["redirectTo"]) {
             afterLoginRedirectTo = values["redirectTo"].toString();
         }
+        else {
+            afterLoginRedirectTo = "/";
+        }
         _this.state = { login: "", senha: "", redirectTo: "", afterLoginRedirectTo: afterLoginRedirectTo };
         _this.onLoginChange = _this.onLoginChange.bind(_this);
         _this.onSenhaChange = _this.onSenhaChange.bind(_this);
@@ -39984,8 +39987,8 @@ var Login = /** @class */ (function (_super) {
                                             _this.onClick(null);
                                     }).bind(this) }),
                                 React.createElement("button", { className: "btn btn-lg btn-primary btn-block", type: "submit", style: { marginBottom: "15px" }, onClick: this.onClick }, "Entrar"),
-                                React.createElement("a", { href: "#", style: { "float": "left" } }, "Criar Conta"),
-                                React.createElement("a", { href: "#", style: { "float": "right" } }, "Esquecia a senha"))))))));
+                                React.createElement(react_router_dom_1.NavLink, { to: "/new-user", style: { "float": "left" } }, "Criar Conta"),
+                                React.createElement(react_router_dom_1.NavLink, { to: "/recover-password", style: { "float": "right" } }, "Esqueci a Senha"))))))));
     };
     return Login;
 }(React.Component));
@@ -40028,6 +40031,7 @@ var finalizar_compra_1 = __webpack_require__(/*! ./finalizar_compra */ "./type_s
 var dataSource_1 = __webpack_require__(/*! ./dataSource */ "./type_scripts/dataSource.tsx");
 var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var compra_finalizada_1 = __webpack_require__(/*! ./compra_finalizada */ "./type_scripts/compra_finalizada.tsx");
+var user_profile_1 = __webpack_require__(/*! ./user_profile */ "./type_scripts/user_profile.tsx");
 // import { BrowserRouter } from 'react-router-dom'
 var PageNames;
 (function (PageNames) {
@@ -40067,7 +40071,12 @@ var Master = /** @class */ (function (_super) {
         this.setState(Object.assign(this.state, { logado: true, pagina: PageNames.Home }));
     };
     Master.prototype.onSignOutClick = function (e) {
-        this.setState(Object.assign(this.state, { logado: false }));
+        if (this.state.logado) {
+            this.setState(Object.assign(this.state, { logado: false }));
+        }
+        else {
+            return;
+        }
     };
     Master.prototype.onProdutoSelected = function (id) {
         this.setState(Object.assign(this.state, { pagina: PageNames.ProdutoDetalhes, id: id }));
@@ -40146,6 +40155,9 @@ var Master = /** @class */ (function (_super) {
     Master.prototype.renderLogin = function (info) {
         return (React.createElement(login_1.Login, { onSuccess: this.onLoginSuccess }));
     };
+    Master.prototype.renderUserProfile = function (info) {
+        return (React.createElement(user_profile_1.UserProfile, { id: parseInt(info.match.params.id) }));
+    };
     Master.prototype.render = function () {
         var menu = (React.createElement("div", { className: "d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom box-shadow header " },
             React.createElement("h5", { className: "my-0 mr-md-auto font-weight-normal" },
@@ -40154,9 +40166,7 @@ var Master = /** @class */ (function (_super) {
             React.createElement("nav", { className: "my-2 my-md-0 mr-md-3" },
                 React.createElement(react_router_dom_1.NavLink, { to: "/produtos", className: "p-2 text-dark" }, "Produtos"),
                 React.createElement(react_router_dom_1.NavLink, { to: "/carrinho", className: "p-2 text-dark" }, "\uD83D\uDED2")),
-            React.createElement("a", { className: "btn btn-outline-primary", href: "#", onClick: this.onSignOutClick },
-                this.state.logado ? "Sair" : "Entrar",
-                " ")));
+            (!this.state.logado ? React.createElement(react_router_dom_1.NavLink, { to: "/login", className: "btn btn-outline-primary" }, "Entrar") : React.createElement("a", { href: "#", className: "btn btn-outline-primary", onClick: this.onSignOutClick }, "Sair"))));
         if (false) {}
         else {
             return (React.createElement("div", null,
@@ -40171,12 +40181,40 @@ var Master = /** @class */ (function (_super) {
                             React.createElement(react_router_dom_1.Route, { path: "/finalizar_compra", component: this.renderFinalizarCompra }),
                             React.createElement(react_router_dom_1.Route, { path: "/compra_finalizada", component: compra_finalizada_1.CompraFinalizada }),
                             React.createElement(react_router_dom_1.Route, { path: "/login", component: this.renderLogin }),
+                            React.createElement(react_router_dom_1.Route, { path: "/user/:id", component: this.renderUserProfile }),
+                            React.createElement(react_router_dom_1.Route, { path: "/new-user", component: this.renderUserProfile }),
                             React.createElement(react_router_dom_1.Route, { path: "*", component: (React.createElement("div", null, "404")) }))))));
         }
     };
     return Master;
 }(React.Component));
 exports.Master = Master;
+
+
+/***/ }),
+
+/***/ "./type_scripts/models.tsx":
+/*!*********************************!*\
+  !*** ./type_scripts/models.tsx ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Produto = /** @class */ (function () {
+    function Produto() {
+    }
+    return Produto;
+}());
+exports.Produto = Produto;
+var User = /** @class */ (function () {
+    function User() {
+    }
+    return User;
+}());
+exports.User = User;
 
 
 /***/ }),
@@ -40350,6 +40388,124 @@ exports.Produtos = Produtos;
 
 /***/ }),
 
+/***/ "./type_scripts/user_profile.tsx":
+/*!***************************************!*\
+  !*** ./type_scripts/user_profile.tsx ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var utils = __webpack_require__(/*! ./utils */ "./type_scripts/utils.tsx");
+var models_1 = __webpack_require__(/*! ./models */ "./type_scripts/models.tsx");
+var UserProfile = /** @class */ (function (_super) {
+    __extends(UserProfile, _super);
+    function UserProfile(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = { usuario: new models_1.User() };
+        _this.carregaDados = _this.carregaDados.bind(_this);
+        _this.onUserNameChange = _this.onUserNameChange.bind(_this);
+        _this.onPasswordChange = _this.onPasswordChange.bind(_this);
+        _this.onNameChange = _this.onNameChange.bind(_this);
+        _this.onEmailChange = _this.onEmailChange.bind(_this);
+        _this.onCepChange = _this.onCepChange.bind(_this);
+        _this.onEnderecoChange = _this.onEnderecoChange.bind(_this);
+        _this.onSave = _this.onSave.bind(_this);
+        if (_this.props.id >= 1)
+            _this.carregaDados(_this.props.id);
+        return _this;
+    }
+    UserProfile.prototype.carregaDados = function (id) {
+        var _this = this;
+        utils.postJSON("/usuarios/getById/" + id, {}).done((function (user) {
+            if (user != null)
+                _this.setState(Object.assign(_this.state, { usuario: user }));
+        }).bind(this));
+    };
+    UserProfile.prototype.onUserNameChange = function (ev) {
+        var newState = Object.assign(this.state);
+        newState.usuario = Object.assign(newState.usuario, { username: ev.target.value });
+        this.setState(newState);
+    };
+    UserProfile.prototype.onPasswordChange = function (ev) {
+        var newState = Object.assign(this.state);
+        newState.usuario = Object.assign(newState.usuario, { password: ev.target.value });
+        this.setState(newState);
+    };
+    UserProfile.prototype.onNameChange = function (ev) {
+        var newState = Object.assign(this.state);
+        newState.usuario = Object.assign(newState.usuario, { name: ev.target.value });
+        this.setState(newState);
+    };
+    UserProfile.prototype.onEmailChange = function (ev) {
+        var newState = Object.assign(this.state);
+        newState.usuario = Object.assign(newState.usuario, { email: ev.target.value });
+        this.setState(newState);
+    };
+    UserProfile.prototype.onCepChange = function (ev) {
+        var newState = Object.assign(this.state);
+        newState.usuario = Object.assign(newState.usuario, { cep: ev.target.value });
+        this.setState(newState);
+    };
+    UserProfile.prototype.onEnderecoChange = function (ev) {
+        var newState = Object.assign(this.state);
+        newState.usuario = Object.assign(newState.usuario, { endereco: ev.target.value });
+        this.setState(newState);
+    };
+    UserProfile.prototype.onSave = function (e) {
+        utils.postJSON("/usuarios/save", this.state.usuario).fail(function () {
+            alert('Não foi possivel cadastrar o usuário.');
+        }).done(function (x) {
+            alert('Cadastrado com sucesso!');
+        });
+    };
+    UserProfile.prototype.render = function () {
+        return (React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } },
+            React.createElement("div", { className: "col-sm-12" },
+                React.createElement("div", null, "Login:"),
+                React.createElement("input", { type: "text", value: this.state.usuario.username, style: { width: "300px" }, onChange: this.onUserNameChange })),
+            React.createElement("div", { className: "col-sm-12" },
+                React.createElement("div", null, "Senha:"),
+                React.createElement("input", { type: "password", value: this.state.usuario.password, style: { width: "300px" }, onChange: this.onPasswordChange })),
+            React.createElement("div", { className: "col-sm-12" },
+                React.createElement("div", null, "Nome:"),
+                React.createElement("input", { type: "text", value: this.state.usuario.name, style: { width: "300px" }, onChange: this.onNameChange })),
+            React.createElement("div", { className: "col-sm-12" },
+                React.createElement("div", null, "E-mail:"),
+                React.createElement("input", { type: "text", value: this.state.usuario.email, style: { width: "300px" }, onChange: this.onEmailChange })),
+            React.createElement("div", { className: "col-sm-12" },
+                React.createElement("div", null, "CEP:"),
+                React.createElement("input", { type: "text", value: this.state.usuario.cep, style: { width: "300px" }, onChange: this.onCepChange })),
+            React.createElement("div", { className: "col-sm-12" },
+                React.createElement("div", null, "Endere\u00E7o:"),
+                React.createElement("input", { type: "text", value: this.state.usuario.endereco, style: { width: "300px" }, onChange: this.onEnderecoChange })),
+            React.createElement("div", { className: "col-sm-12" },
+                React.createElement("br", null),
+                React.createElement("input", { type: "button", className: "btn btn-primary btn-lg", value: "Cadastrar", onClick: this.onSave }))));
+    };
+    return UserProfile;
+}(React.Component));
+exports.UserProfile = UserProfile;
+
+
+/***/ }),
+
 /***/ "./type_scripts/utils.tsx":
 /*!********************************!*\
   !*** ./type_scripts/utils.tsx ***!
@@ -40362,7 +40518,8 @@ exports.Produtos = Produtos;
 Object.defineProperty(exports, "__esModule", { value: true });
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 function postJSON(url, data) {
-    var dataStr = $.isPlainObject(data) || $.isArray(data) ? JSON.stringify(data) : data.toString();
+    // var dataStr = $.isPlainObject(data) || $.isArray(data) ? JSON.stringify(data) : data.toString();
+    var dataStr = JSON.stringify(data);
     return $.ajax({
         type: 'POST',
         url: url,

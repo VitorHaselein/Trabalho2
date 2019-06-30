@@ -38,13 +38,13 @@ export class Home extends React.Component<{}, { produtos: Produto[] }> {
                         <div className="carousel-inner">
                             <div className="carousel-item active">
                                 <div className="">
-                                    <img className="d-block" style={{ margin: "auto", height: "400px" }} src="../static/images/bunner.jpg" />
+                                    <img className="d-block" style={{ margin: "auto", height: "340px" }} src="../static/images/bunner.jpg" />
                                 </div>
                             </div>
 
                             <div className="carousel-item">
                                 <div className="">
-                                    <img className="d-block" style={{ margin: "auto", height: "400px" }} src="../static/images/Kit-Shampoo-Colonia-e-Condicionador-Sanol-Dog-2.png" />
+                                    <img className="d-block" style={{ margin: "auto", height: "340px" }} src="../static/images/Kit-Shampoo-Colonia-e-Condicionador-Sanol-Dog-2.png" />
                                 </div>
                                 <div className="carousel-caption text-left" style={{ color: "black" }}>
                                     <h1 title="Variadas marcas de shampoo.">Shampoos</h1>
@@ -53,7 +53,7 @@ export class Home extends React.Component<{}, { produtos: Produto[] }> {
                             </div>
                             <div className="carousel-item">
                                 <div className="">
-                                    <img className="d-block" style={{ margin: "auto", height: "400px" }} src="../static/images/brinquedo-arranhador-para-gatos-creme-cbr03327-11825217.jpg" />
+                                    <img className="d-block" style={{ margin: "auto", height: "340px" }} src="../static/images/brinquedo-arranhador-para-gatos-creme-cbr03327-11825217.jpg" />
                                 </div>
                                 <div className="carousel-caption text-left" style={{ color: "black" }}>
                                     <h1 title="Rações, Brinquedos, Vacinas e muito mais.">Produtos para todos os seus PETS!</h1>
@@ -61,7 +61,7 @@ export class Home extends React.Component<{}, { produtos: Produto[] }> {
                             </div>
                             <div className="carousel-item">
                                 <div className="">
-                                    <img className="d-block" style={{ margin: "auto", height: "400px" }} src="../static/images/guardar-brinquedos-2.png" />
+                                    <img className="d-block" style={{ margin: "auto", height: "340px" }} src="../static/images/guardar-brinquedos-2.png" />
                                 </div>
                             </div>
                         </div>
