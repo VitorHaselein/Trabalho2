@@ -34723,7 +34723,7 @@ if (false) {} else {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40414,11 +40414,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var utils = __webpack_require__(/*! ./utils */ "./type_scripts/utils.tsx");
 var models_1 = __webpack_require__(/*! ./models */ "./type_scripts/models.tsx");
+var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 var UserProfile = /** @class */ (function (_super) {
     __extends(UserProfile, _super);
     function UserProfile(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = { usuario: new models_1.User() };
+        _this.state = { usuario: new models_1.User(), goto: "" };
         _this.carregaDados = _this.carregaDados.bind(_this);
         _this.onUserNameChange = _this.onUserNameChange.bind(_this);
         _this.onPasswordChange = _this.onPasswordChange.bind(_this);
@@ -40427,6 +40428,7 @@ var UserProfile = /** @class */ (function (_super) {
         _this.onCepChange = _this.onCepChange.bind(_this);
         _this.onEnderecoChange = _this.onEnderecoChange.bind(_this);
         _this.onSave = _this.onSave.bind(_this);
+        _this.resolveCEP = _this.resolveCEP.bind(_this);
         if (_this.props.id >= 1)
             _this.carregaDados(_this.props.id);
         return _this;
@@ -40469,35 +40471,61 @@ var UserProfile = /** @class */ (function (_super) {
         this.setState(newState);
     };
     UserProfile.prototype.onSave = function (e) {
-        utils.postJSON("/usuarios/save", this.state.usuario).fail(function () {
-            alert('Não foi possivel cadastrar o usuário.');
-        }).done(function (x) {
+        utils.postJSON("/usuarios/save", this.state.usuario).done((function (x) {
             alert('Cadastrado com sucesso!');
+            this.setState(Object.assign(this.state, { goto: "/" }));
+        }).bind(this)).fail(function () {
+            alert('Não foi possivel cadastrar o usuário.');
         });
     };
+    UserProfile.prototype.resolveCEP = function () {
+        var _this = this;
+        var cep = this.state.usuario.cep.replace(/[^0-9]+/gi, "");
+        if (cep.length >= 8) {
+            var r = jQuery.ajax({
+                url: "https://viacep.com.br/ws/" + cep + "/json/unicode/?callback=callback",
+                jsonp: "callback",
+                dataType: "jsonp"
+            });
+            r.done((function (resposta) {
+                if (resposta) {
+                    var addr = [resposta.logradouro, resposta.bairro, resposta.localidade, resposta.uf].join(", ");
+                    var newState = Object.assign(_this.state);
+                    newState.usuario = Object.assign(newState.usuario, { endereco: addr });
+                    _this.setState(newState);
+                }
+            }).bind(this));
+        }
+    };
     UserProfile.prototype.render = function () {
-        return (React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } },
-            React.createElement("div", { className: "col-sm-12" },
-                React.createElement("div", null, "Login:"),
-                React.createElement("input", { type: "text", value: this.state.usuario.username, style: { width: "300px" }, onChange: this.onUserNameChange })),
-            React.createElement("div", { className: "col-sm-12" },
-                React.createElement("div", null, "Senha:"),
-                React.createElement("input", { type: "password", value: this.state.usuario.password, style: { width: "300px" }, onChange: this.onPasswordChange })),
-            React.createElement("div", { className: "col-sm-12" },
-                React.createElement("div", null, "Nome:"),
-                React.createElement("input", { type: "text", value: this.state.usuario.name, style: { width: "300px" }, onChange: this.onNameChange })),
-            React.createElement("div", { className: "col-sm-12" },
-                React.createElement("div", null, "E-mail:"),
-                React.createElement("input", { type: "text", value: this.state.usuario.email, style: { width: "300px" }, onChange: this.onEmailChange })),
-            React.createElement("div", { className: "col-sm-12" },
-                React.createElement("div", null, "CEP:"),
-                React.createElement("input", { type: "text", value: this.state.usuario.cep, style: { width: "300px" }, onChange: this.onCepChange })),
-            React.createElement("div", { className: "col-sm-12" },
-                React.createElement("div", null, "Endere\u00E7o:"),
-                React.createElement("input", { type: "text", value: this.state.usuario.endereco, style: { width: "300px" }, onChange: this.onEnderecoChange })),
-            React.createElement("div", { className: "col-sm-12" },
-                React.createElement("br", null),
-                React.createElement("input", { type: "button", className: "btn btn-primary btn-lg", value: "Cadastrar", onClick: this.onSave }))));
+        if (this.state.goto) {
+            return (React.createElement(react_router_dom_1.Redirect, { to: this.state.goto }));
+        }
+        else {
+            return (React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } },
+                React.createElement("div", { className: "col-sm-12" },
+                    React.createElement("div", null, "Login:"),
+                    React.createElement("input", { type: "text", value: this.state.usuario.username, style: { width: "300px" }, onChange: this.onUserNameChange })),
+                React.createElement("div", { className: "col-sm-12" },
+                    React.createElement("div", null, "Senha:"),
+                    React.createElement("input", { type: "password", value: this.state.usuario.password, style: { width: "300px" }, onChange: this.onPasswordChange })),
+                React.createElement("div", { className: "col-sm-12" },
+                    React.createElement("div", null, "Nome:"),
+                    React.createElement("input", { type: "text", value: this.state.usuario.name, style: { width: "300px" }, onChange: this.onNameChange })),
+                React.createElement("div", { className: "col-sm-12" },
+                    React.createElement("div", null, "E-mail:"),
+                    React.createElement("input", { type: "text", value: this.state.usuario.email, style: { width: "300px" }, onChange: this.onEmailChange })),
+                React.createElement("div", { className: "col-sm-12" },
+                    React.createElement("div", null, "CEP:"),
+                    React.createElement("input", { type: "text", value: this.state.usuario.cep, style: { width: "300px" }, onChange: this.onCepChange, onBlur: this.resolveCEP }),
+                    React.createElement("input", { type: "button", className: "btn btn-sm", value: "Carregar dados de endere\u00E7o", onClick: this.resolveCEP })),
+                React.createElement("div", { className: "col-sm-12" },
+                    React.createElement("div", null, "Endere\u00E7o:"),
+                    React.createElement("input", { type: "text", value: this.state.usuario.endereco, style: { width: "300px" }, onChange: this.onEnderecoChange })),
+                React.createElement("div", { className: "col-sm-12" },
+                    React.createElement("br", null),
+                    React.createElement("input", { type: "button", className: "btn btn-primary btn-lg", value: "Cadastrar", onClick: this.onSave }))));
+        }
     };
     return UserProfile;
 }(React.Component));
