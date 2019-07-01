@@ -12920,9 +12920,9 @@ module.exports = ReactPropTypesSecret;
 /***/ }),
 
 /***/ "./node_modules/querystring-es3/decode.js":
-/*!************************************************!*\
-  !*** ./node_modules/querystring-es3/decode.js ***!
-  \************************************************/
+/*!***********************************************************!*\
+  !*** ../Trabalho2/node_modules/querystring-es3/decode.js ***!
+  \***********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13016,9 +13016,9 @@ var isArray = Array.isArray || function (xs) {
 /***/ }),
 
 /***/ "./node_modules/querystring-es3/encode.js":
-/*!************************************************!*\
-  !*** ./node_modules/querystring-es3/encode.js ***!
-  \************************************************/
+/*!***********************************************************!*\
+  !*** ../Trabalho2/node_modules/querystring-es3/encode.js ***!
+  \***********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13113,9 +13113,9 @@ var objectKeys = Object.keys || function (obj) {
 /***/ }),
 
 /***/ "./node_modules/querystring-es3/index.js":
-/*!***********************************************!*\
-  !*** ./node_modules/querystring-es3/index.js ***!
-  \***********************************************/
+/*!**********************************************************!*\
+  !*** ../Trabalho2/node_modules/querystring-es3/index.js ***!
+  \**********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -34723,7 +34723,7 @@ if (false) {} else {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39543,9 +39543,9 @@ function valueEqual(a, b) {
 /***/ }),
 
 /***/ "./node_modules/webpack/buildin/global.js":
-/*!***********************************!*\
-  !*** (webpack)/buildin/global.js ***!
-  \***********************************/
+/*!************************************************!*\
+  !*** ./node_modules/webpack/buildin/global.js ***!
+  \************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -40530,16 +40530,16 @@ var UserProfile = /** @class */ (function (_super) {
             return (React.createElement("div", { className: "row", style: { backgroundColor: "white", padding: "32px" } },
                 React.createElement("div", { className: "col-sm-12" },
                     React.createElement("div", null, "Login:"),
-                    React.createElement("input", { type: "text", value: this.state.usuario.username, style: { width: "300px" }, onChange: this.onUserNameChange })),
+                    React.createElement("input", { type: "text", value: this.state.usuario.username, required: true, style: { width: "300px" }, onChange: this.onUserNameChange })),
                 React.createElement("div", { className: "col-sm-12" },
                     React.createElement("div", null, "Senha:"),
-                    React.createElement("input", { type: "password", value: this.state.usuario.password, style: { width: "300px" }, onChange: this.onPasswordChange })),
+                    React.createElement("input", { type: "password", value: this.state.usuario.password, required: true, style: { width: "300px" }, onChange: this.onPasswordChange })),
                 React.createElement("div", { className: "col-sm-12" },
                     React.createElement("div", null, "Nome:"),
                     React.createElement("input", { type: "text", value: this.state.usuario.name, style: { width: "300px" }, onChange: this.onNameChange })),
                 React.createElement("div", { className: "col-sm-12" },
                     React.createElement("div", null, "E-mail:"),
-                    React.createElement("input", { type: "text", value: this.state.usuario.email, style: { width: "300px" }, onChange: this.onEmailChange })),
+                    React.createElement("input", { type: "text", value: this.state.usuario.email, required: true, style: { width: "300px" }, onChange: this.onEmailChange })),
                 React.createElement("div", { className: "col-sm-12" },
                     React.createElement("div", null, "CEP:"),
                     React.createElement("input", { type: "text", value: this.state.usuario.cep, style: { width: "300px" }, onChange: this.onCepChange, onBlur: this.resolveCEP }),
@@ -40549,7 +40549,7 @@ var UserProfile = /** @class */ (function (_super) {
                     React.createElement("input", { type: "text", value: this.state.usuario.endereco, style: { width: "300px" }, onChange: this.onEnderecoChange })),
                 React.createElement("div", { className: "col-sm-12" },
                     React.createElement("br", null),
-                    React.createElement("input", { type: "button", className: "btn btn-primary btn-lg", value: this.state.usuario.id <= 0 ? "Cadastrar" : "Atualizar", onClick: this.onSave }))));
+                    React.createElement("input", { type: "button", className: "btn btn-primary btn-lg", value: "Salvar", onClick: this.onSave }))));
         }
     };
     return UserProfile;
