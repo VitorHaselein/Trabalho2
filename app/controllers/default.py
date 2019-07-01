@@ -48,7 +48,7 @@ def usuario_getById(id):
 
 @app.route("/usuarios/save", methods=['GET', 'POST'])
 def usuario_save():
-    id = request.json["id"]
+    id = request.json["id"] if "id" in request.json else 0
     username = request.json["username"]
     password = request.json["password"]
     name = request.json["name"]

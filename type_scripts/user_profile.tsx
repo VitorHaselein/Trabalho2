@@ -111,11 +111,11 @@ export class UserProfile extends React.Component<{ id: number }, { usuario: User
                 <div className="row" style={{ backgroundColor: "white", padding: "32px" }}>
                     <div className="col-sm-12">
                         <div>Login:</div>
-                        <input type="text" value={this.state.usuario.username} style={{ width: "300px" }} onChange={this.onUserNameChange} />
+                        <input type="text" value={this.state.usuario.username} required style={{ width: "300px" }} onChange={this.onUserNameChange} />
                     </div>
                     <div className="col-sm-12">
                         <div>Senha:</div>
-                        <input type="password" value={this.state.usuario.password} style={{ width: "300px" }} onChange={this.onPasswordChange} />
+                        <input type="password" value={this.state.usuario.password} required style={{ width: "300px" }} onChange={this.onPasswordChange} />
                     </div>
                     <div className="col-sm-12">
                         <div>Nome:</div>
@@ -123,7 +123,7 @@ export class UserProfile extends React.Component<{ id: number }, { usuario: User
                     </div>
                     <div className="col-sm-12">
                         <div>E-mail:</div>
-                        <input type="text" value={this.state.usuario.email} style={{ width: "300px" }} onChange={this.onEmailChange} />
+                        <input type="text" value={this.state.usuario.email} required style={{ width: "300px" }} onChange={this.onEmailChange} />
                     </div>
                     <div className="col-sm-12">
                         <div>CEP:</div>
@@ -136,7 +136,7 @@ export class UserProfile extends React.Component<{ id: number }, { usuario: User
                     </div>
                     <div className="col-sm-12">
                         <br />
-                        <input type="button" className="btn btn-primary btn-lg" value={this.state.usuario.id <= 0 ? "Cadastrar" : "Atualizar"} onClick={this.onSave}></input>
+                        <input type="button" className="btn btn-primary btn-lg" value={"Salvar"} onClick={this.onSave}></input>
                     </div>
                 </div>
             );
