@@ -159,6 +159,12 @@ export class Master extends React.Component<{}, { usuario_logado: User, carrinho
         return (<UserProfile id={parseInt(info.match.params.id)} />);
     }
 
+    renderCompraFinalizada() {
+        // limpa o carrinho
+        this.setState(Object.assign(this.state, { carrinho: [] }));
+        return (<CompraFinalizada />);
+    }
+
     render() {
         var menu = (<div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom box-shadow header " >
             <h5 className="my-0 mr-md-auto font-weight-normal">
@@ -191,7 +197,7 @@ export class Master extends React.Component<{}, { usuario_logado: User, carrinho
                             <Route path="/produto_detalhes/:id" component={this.renderProdutoDetalhes} />
                             <Route path="/carrinho" component={this.renderCarrinho} />
                             <Route path="/finalizar_compra" component={this.renderFinalizarCompra} />
-                            <Route path="/compra_finalizada" component={CompraFinalizada} />
+                            <Route path="/compra_finalizada" component={this.renderCompraFinalizada} />
                             <Route path="/login" component={this.renderLogin} />
                             <Route path="/user/:id" component={this.renderUserProfile} />
                             <Route path="/new-user" component={this.renderUserProfile} />
