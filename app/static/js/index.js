@@ -39777,8 +39777,10 @@ var FinalizarCompra = /** @class */ (function (_super) {
         return total;
     };
     FinalizarCompra.prototype.confirmarPagamento = function () {
+        var id = this.props.usuario_logado.id;
+        console.log("id=", id);
         var dados = {
-            cliente_id: 1,
+            cliente_id: id,
             carrinho: this.props.carrinho.map(function (c) { return ({
                 produto_id: c.produto.id,
                 qtd: c.qtd,
@@ -39984,7 +39986,7 @@ var Login = /** @class */ (function (_super) {
         utils.postJSON("/login", { login: this.state.login, senha: this.state.senha }).done((function (response) {
             if (response.success) {
                 if (_this.props.onSuccess)
-                    _this.props.onSuccess(_this.state.login);
+                    _this.props.onSuccess(JSON.parse(response.user));
                 _this.setState(Object.assign(_this.state, { redirectTo: _this.state.afterLoginRedirectTo }));
             }
         }).bind(this));
@@ -40091,10 +40093,7 @@ var Master = /** @class */ (function (_super) {
     };
     Master.prototype.onSignOutClick = function (e) {
         if (this.state.usuario_logado) {
-            this.setState(Object.assign(this.state, { logado: false }));
-        }
-        else {
-            return;
+            this.setState(Object.assign(this.state, { usuario_logado: null }));
         }
     };
     Master.prototype.onProdutoSelected = function (id) {
@@ -40185,7 +40184,9 @@ var Master = /** @class */ (function (_super) {
             React.createElement("nav", { className: "my-2 my-md-0 mr-md-3" },
                 React.createElement(react_router_dom_1.NavLink, { to: "/produtos", className: "p-2 text-dark" }, "Produtos"),
                 React.createElement(react_router_dom_1.NavLink, { to: "/carrinho", className: "p-2 text-dark" }, "\uD83D\uDED2")),
-            (!this.state.usuario_logado ? React.createElement(react_router_dom_1.NavLink, { to: "/login", className: "btn btn-outline-primary" }, "Entrar") : React.createElement("a", { href: "#", className: "btn btn-outline-primary", onClick: this.onSignOutClick }, "Sair"))));
+            (!this.state.usuario_logado ? React.createElement(react_router_dom_1.NavLink, { to: "/login", className: "btn btn-outline-primary" }, "Entrar") : React.createElement(react_router_dom_1.NavLink, { to: "/user/" + this.state.usuario_logado.id, className: "btn btn-outline-primary" }, this.state.usuario_logado.name)),
+            "\u00A0",
+            React.createElement("a", { href: "#", className: "btn btn-outline-primary", style: { display: (!this.state.usuario_logado ? "none" : "") }, onClick: this.onSignOutClick }, "Sair")));
         if (false) {}
         else {
             return (React.createElement("div", null,
@@ -40448,15 +40449,18 @@ var UserProfile = /** @class */ (function (_super) {
         _this.onEnderecoChange = _this.onEnderecoChange.bind(_this);
         _this.onSave = _this.onSave.bind(_this);
         _this.resolveCEP = _this.resolveCEP.bind(_this);
-        if (_this.props.id >= 1)
+        if (_this.props.id >= 1) {
             _this.carregaDados(_this.props.id);
+        }
         return _this;
     }
     UserProfile.prototype.carregaDados = function (id) {
         var _this = this;
-        utils.postJSON("/usuarios/getById/" + id, {}).done((function (user) {
-            if (user != null)
+        return utils.postJSON("/usuarios/getById/" + id, {}).done((function (user) {
+            if (user != null) {
                 _this.setState(Object.assign(_this.state, { usuario: user }));
+                _this.resolveCEP();
+            }
         }).bind(this));
     };
     UserProfile.prototype.onUserNameChange = function (ev) {
@@ -40491,7 +40495,7 @@ var UserProfile = /** @class */ (function (_super) {
     };
     UserProfile.prototype.onSave = function (e) {
         utils.postJSON("/usuarios/save", this.state.usuario).done((function (x) {
-            alert('Cadastrado com sucesso!');
+            alert('Salvo com sucesso!');
             this.setState(Object.assign(this.state, { goto: "/" }));
         }).bind(this)).fail(function () {
             alert('Não foi possivel cadastrar o usuário.');
@@ -40545,7 +40549,7 @@ var UserProfile = /** @class */ (function (_super) {
                     React.createElement("input", { type: "text", value: this.state.usuario.endereco, style: { width: "300px" }, onChange: this.onEnderecoChange })),
                 React.createElement("div", { className: "col-sm-12" },
                     React.createElement("br", null),
-                    React.createElement("input", { type: "button", className: "btn btn-primary btn-lg", value: "Cadastrar", onClick: this.onSave }))));
+                    React.createElement("input", { type: "button", className: "btn btn-primary btn-lg", value: this.state.usuario.id <= 0 ? "Cadastrar" : "Atualizar", onClick: this.onSave }))));
         }
     };
     return UserProfile;

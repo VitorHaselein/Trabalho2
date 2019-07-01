@@ -36,7 +36,7 @@ export class Login extends React.Component<{ onSuccess: (string) => void }, { lo
         utils.postJSON("/login", { login: this.state.login, senha: this.state.senha }).done(((response) => {
             if (response.success) {
                 if (this.props.onSuccess)
-                    this.props.onSuccess(this.state.login);
+                    this.props.onSuccess(JSON.parse(response.user));
                 this.setState(Object.assign(this.state, { redirectTo: this.state.afterLoginRedirectTo }));
             }
         }).bind(this));

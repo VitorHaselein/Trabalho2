@@ -21,14 +21,17 @@ export class UserProfile extends React.Component<{ id: number }, { usuario: User
         this.onSave = this.onSave.bind(this);
         this.resolveCEP = this.resolveCEP.bind(this);
 
-        if (this.props.id >= 1)
+        if (this.props.id >= 1) {
             this.carregaDados(this.props.id);
+        }
     }
 
     carregaDados(id: number) {
-        utils.postJSON("/usuarios/getById/" + id, {}).done(((user: User[]) => {
-            if (user != null)
+        return utils.postJSON("/usuarios/getById/" + id, {}).done(((user: User[]) => {
+            if (user != null) {
                 this.setState(Object.assign(this.state, { usuario: user }));
+                this.resolveCEP();
+            }
         }).bind(this));
     }
 
@@ -70,7 +73,7 @@ export class UserProfile extends React.Component<{ id: number }, { usuario: User
 
     onSave(e: React.MouseEvent<HTMLInputElement, MouseEvent>) {
         utils.postJSON("/usuarios/save", this.state.usuario).done((function (x) {
-            alert('Cadastrado com sucesso!');
+            alert('Salvo com sucesso!');
             this.setState(Object.assign(this.state, { goto: "/" }));
         }).bind(this)).fail(() => {
             alert('Não foi possivel cadastrar o usuário.');
@@ -133,7 +136,7 @@ export class UserProfile extends React.Component<{ id: number }, { usuario: User
                     </div>
                     <div className="col-sm-12">
                         <br />
-                        <input type="button" className="btn btn-primary btn-lg" value="Cadastrar" onClick={this.onSave}></input>
+                        <input type="button" className="btn btn-primary btn-lg" value={this.state.usuario.id <= 0 ? "Cadastrar" : "Atualizar"} onClick={this.onSave}></input>
                     </div>
                 </div>
             );

@@ -28,8 +28,11 @@ export class FinalizarCompra extends React.Component<{ usuario_logado: User, car
     }
 
     confirmarPagamento() {
+        var id = this.props.usuario_logado.id;
+        console.log("id=", id);
+        
         var dados = {
-            cliente_id: 1,
+            cliente_id: id,
             carrinho: this.props.carrinho.map(c => ({
                 produto_id: c.produto.id,
                 qtd: c.qtd,

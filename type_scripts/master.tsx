@@ -60,9 +60,7 @@ export class Master extends React.Component<{}, { usuario_logado: User, carrinho
 
     onSignOutClick(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
         if (this.state.usuario_logado) {
-            this.setState(Object.assign(this.state, { logado: false }));
-        } else {
-            return
+            this.setState(Object.assign(this.state, { usuario_logado: null }));
         }
     }
 
@@ -175,7 +173,8 @@ export class Master extends React.Component<{}, { usuario_logado: User, carrinho
                 {/* <a className="p-2 text-dark icone-carrinho" href="#" data-pagina_id={PageNames.Carrinho} onClick={this.onMenuItemClick} title="Carrinho"></a> */}
                 {/* <a className="p-2 text-dark" href="#" data-pagina_id={PageNames.Preferences} onClick={this.onMenuItemClick}>Configurações</a> */}
             </nav>
-            {(!this.state.usuario_logado ? <NavLink to={"/login"} className="btn btn-outline-primary">Entrar</NavLink> : <a href="#" className="btn btn-outline-primary" onClick={this.onSignOutClick}>Sair</a>)}
+            {(!this.state.usuario_logado ? <NavLink to={"/login"} className="btn btn-outline-primary">Entrar</NavLink> : <NavLink to={"/user/" + this.state.usuario_logado.id} className="btn btn-outline-primary">{this.state.usuario_logado.name}</NavLink>)}&nbsp;
+            <a href="#" className="btn btn-outline-primary" style={{ display: (!this.state.usuario_logado ? "none" : "") }} onClick={this.onSignOutClick}>Sair</a>
         </div>);
 
 

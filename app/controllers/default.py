@@ -48,16 +48,22 @@ def usuario_getById(id):
 
 @app.route("/usuarios/save", methods=['GET', 'POST'])
 def usuario_save():
+    id = request.json["id"]
     username = request.json["username"]
     password = request.json["password"]
     name = request.json["name"]
     email = request.json["email"]
     cep = request.json["cep"]
 
-    usuario = User(username, password, name, email)
-    usuario.cep = cep
-    db.session.add(usuario)
-    db.session.commit()
+    if id <= 0:
+        usuario = User(username, password, name, email)
+        usuario.cep = cep
+        db.session.add(usuario)
+        db.session.commit()
+    else:
+        User.query.filter_by(id=id).update(
+            {"name": name, "username": username, "password": password, "email": email, "cep": cep})
+        db.session.commit()
 
     return jsonify(True)
 
